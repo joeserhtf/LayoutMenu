@@ -10,6 +10,7 @@ class LayoutMenu extends StatefulWidget {
   String logo;
   Widget botaoAcao;
   List<Color> coresMenu;
+  Widget logoutPage;
 
   LayoutMenu({
     this.widgetsAcao,
@@ -19,6 +20,7 @@ class LayoutMenu extends StatefulWidget {
     @required this.logo,
     this.botaoAcao,
     this.coresMenu,
+    @required this.logoutPage,
   });
 
   @override
@@ -35,6 +37,14 @@ class _LayoutMenuState extends State<LayoutMenu> {
     if (widget.coresMenu[0] != null) corAppBarConteudo = widget.coresMenu[0];
     if (widget.coresMenu[1] != null) corAppBarMenu = widget.coresMenu[1];
     if (widget.coresMenu[2] != null) corMenuConteudo = widget.coresMenu[2];
+
+    widget.pages.add(ItemMenu(
+      icone: Icons.exit_to_app,
+      visivel: true,
+      titulo: 'Logout',
+      pagina: Container(),
+      submenu: null,
+    ));
 
     controladorPaginas.addListener(() {
       if (controladorPaginas.page.round() != paginaAtual) {
@@ -96,6 +106,7 @@ class _LayoutMenuState extends State<LayoutMenu> {
                   nomeApp: widget.nomeApp,
                   versao: widget.versaoApp,
                   pages: widget.pages,
+                  logoutPage: widget.logoutPage,
                 ),
               ),
             );

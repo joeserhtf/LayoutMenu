@@ -8,8 +8,9 @@ class BarraLateral extends StatefulWidget {
   String nomeApp;
   String versao;
   List<ItemMenu> pages;
+  Widget logoutPage;
 
-  BarraLateral({this.logo, this.nomeApp, @required this.pages, @required this.versao});
+  BarraLateral({this.logo, this.nomeApp, @required this.pages, @required this.versao, @required this.logoutPage});
 
   @override
   _BarraLateralState createState() => _BarraLateralState();
@@ -54,7 +55,7 @@ class _BarraLateralState extends State<BarraLateral> {
     return ListView.builder(
       itemCount: widget.pages.length,
       itemBuilder: (context, index) {
-        return _menu(Colors.white, Icons.account_balance_wallet, Colors.white, widget.pages[index].titulo, index);
+        return _menu(Colors.white, widget.pages[index].icone, Colors.white, widget.pages[index].titulo, index);
       },
     );
   }
@@ -101,9 +102,13 @@ class _BarraLateralState extends State<BarraLateral> {
                         ),
                       ),
                       onTap: () {
-                        setState(() {
-                          controladorPaginas.jumpToPage(index);
-                        });
+                        if (widget.pages.length - 1 == index) {
+                          Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => widget.logoutPage));
+                        } else {
+                          setState(() {
+                            controladorPaginas.jumpToPage(index);
+                          });
+                        }
                       },
                     ),
                   );
@@ -123,9 +128,13 @@ class _BarraLateralState extends State<BarraLateral> {
             style: TextStyle(color: textColor, fontWeight: FontWeight.bold),
           ),
           onTap: () {
-            setState(() {
-              controladorPaginas.jumpToPage(index);
-            });
+            if (widget.pages.length - 1 == index) {
+              Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => widget.logoutPage));
+            } else {
+              setState(() {
+                controladorPaginas.jumpToPage(index);
+              });
+            }
           },
         );
       }
@@ -151,9 +160,13 @@ class _BarraLateralState extends State<BarraLateral> {
                   openMenu = true;
                   controllerAnimacao.add(true);
                 } else {
-                  setState(() {
-                    controladorPaginas.jumpToPage(index);
-                  });
+                  if (widget.pages.length - 1 == index) {
+                    Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => widget.logoutPage));
+                  } else {
+                    setState(() {
+                      controladorPaginas.jumpToPage(index);
+                    });
+                  }
                 }
               },
             ),
