@@ -55,7 +55,7 @@ class _BarraLateralState extends State<BarraLateral> {
     return ListView.builder(
       itemCount: widget.pages.length,
       itemBuilder: (context, index) {
-        return _menu(Colors.white, widget.pages[index].icone, Colors.white, widget.pages[index].titulo, index);
+        return widget.pages[index].visivel ? _menu(Colors.white, widget.pages[index].icone, Colors.white, widget.pages[index].titulo, index) : Container();
       },
     );
   }
