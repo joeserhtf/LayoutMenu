@@ -9,7 +9,13 @@ class LayoutMenu extends StatefulWidget {
   String versaoApp;
   String logo;
   Widget botaoAcao;
-  List<Color> coresMenu;
+  Color appBarColor;
+  Color navColor;
+  Color headerColor;
+  Color textAppBarColor;
+  Color textnavColor;
+  Color textHeaderColor;
+  Color selectedColor;
   Widget logoutPage;
 
   LayoutMenu({
@@ -19,7 +25,13 @@ class LayoutMenu extends StatefulWidget {
     @required this.versaoApp,
     @required this.logo,
     this.botaoAcao,
-    this.coresMenu,
+    this.appBarColor,
+    this.headerColor,
+    this.navColor,
+    this.textAppBarColor,
+    this.textHeaderColor,
+    this.textnavColor,
+    this.selectedColor,
     @required this.logoutPage,
   });
 
@@ -34,9 +46,13 @@ class _LayoutMenuState extends State<LayoutMenu> {
   void initState() {
     super.initState();
 
-    if (widget.coresMenu[0] != null) corAppBarConteudo = widget.coresMenu[0];
-    if (widget.coresMenu[1] != null) corAppBarMenu = widget.coresMenu[1];
-    if (widget.coresMenu[2] != null) corMenuConteudo = widget.coresMenu[2];
+    if (widget.appBarColor != null) appBarColor = widget.appBarColor;
+    if (widget.headerColor != null) headerColor = widget.headerColor;
+    if (widget.navColor != null) navColor = widget.navColor;
+    if (widget.textAppBarColor != null) textAppBarColor = widget.textAppBarColor;
+    if (widget.textHeaderColor != null) textHeaderColor = widget.textHeaderColor;
+    if (widget.textnavColor != null) textnavColor = widget.textnavColor;
+    if (widget.selectedColor != null) selectedColor = widget.selectedColor;
 
     widget.pages.add(ItemMenu(
       icone: Icons.exit_to_app,
@@ -104,9 +120,9 @@ class _LayoutMenuState extends State<LayoutMenu> {
               duration: Duration(milliseconds: tempoAnimacao),
               child: AnimatedContainer(
                 duration: Duration(milliseconds: tempoAnimacao),
-                width: openMenu ? 300 : 65, //sizeWidthMenu
+                width: openMenu ? 300 : 65,
                 height: 100,
-                color: corAppBarMenu,
+                color: navColor,
                 child: BarraLateral(
                   logo: widget.logo,
                   nomeApp: widget.nomeApp,
@@ -139,7 +155,7 @@ class _LayoutMenuState extends State<LayoutMenu> {
                 duration: Duration(milliseconds: tempoAnimacao),
                 padding: EdgeInsets.only(left: openMenu ? 292 : 57, right: 16),
                 child: IconButton(
-                    icon: Icon(Icons.menu),
+                    icon: Icon(Icons.menu, color: textAppBarColor,),
                     onPressed: () {
                       openMenu = !openMenu;
                       controllerAnimacao.add(true);
@@ -149,11 +165,11 @@ class _LayoutMenuState extends State<LayoutMenu> {
           ),
           Padding(
             padding: EdgeInsets.only(bottom: 4),
-            child: Text(widget.pages[paginaAtual].titulo),
+            child: Text(widget.pages[paginaAtual].titulo, style: TextStyle(color: textAppBarColor),),
           ),
         ],
       ),
-      backgroundColor: corAppBarConteudo,
+      backgroundColor: appBarColor,
     );
   }
 

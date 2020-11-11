@@ -1,6 +1,6 @@
 name: layoutmenu
 
-version: 0.1.0+1
+version: 0.1.5+2
 
 environment:
   sdk: ">=2.7.0 <3.0.0"

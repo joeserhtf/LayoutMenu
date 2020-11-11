@@ -21,7 +21,7 @@ class _BarraLateralState extends State<BarraLateral> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: corMenuConteudo,
+      backgroundColor: navColor,
       appBar: AppBar(
         title: Container(
           alignment: Alignment.center,
@@ -37,16 +37,17 @@ class _BarraLateralState extends State<BarraLateral> {
                       textAlign: TextAlign.center,
                       style: TextStyle(
                         fontWeight: FontWeight.bold,
+                        color: textHeaderColor,
                       ),
                     ),
                     Text(
                       'Versão: ' + widget.versao ?? 'Deconhecida',
-                      style: TextStyle(fontSize: 11, color: Colors.white),
+                      style: TextStyle(fontSize: 11, color: textHeaderColor),
                     ),
                   ],
                 ),
         ),
-        backgroundColor: corAppBarMenu,
+        backgroundColor: headerColor,
       ),
       body: _listMenus(),
     );
@@ -57,13 +58,13 @@ class _BarraLateralState extends State<BarraLateral> {
       itemCount: widget.pages.length,
       itemBuilder: (context, index) {
         return widget.pages[index].visivel
-            ? _menu(Colors.white, widget.pages[index].icone, Colors.white, widget.pages[index].titulo, index)
+            ? _menu(widget.pages[index].icone, widget.pages[index].titulo, index)
             : Container();
       },
     );
   }
 
-  _menu(Color textColor, IconData icon, Color iconColor, String text, int index) {
+  _menu(IconData icon, String text, int index) {
     if (openMenu) {
       if (widget.pages[index].submenu != null) {
         return SingleChildScrollView(
@@ -71,15 +72,15 @@ class _BarraLateralState extends State<BarraLateral> {
             initiallyExpanded: false,
             leading: Icon(
               icon,
-              color: iconColor,
+              color: textnavColor,
             ),
             title: Text(
               text,
-              style: TextStyle(color: textColor, fontWeight: FontWeight.bold),
+              style: TextStyle(color: textnavColor, fontWeight: FontWeight.bold,),
             ),
             trailing: Icon(
               Icons.keyboard_arrow_down,
-              color: iconColor,
+              color: textnavColor,
             ),
             children: <Widget>[
               ListView.builder(
@@ -94,13 +95,13 @@ class _BarraLateralState extends State<BarraLateral> {
                       dense: true,
                       leading: Icon(
                         widget.pages[index].submenu[i].icone,
-                        color: iconColor,
+                        color: textnavColor,
                         size: 12,
                       ),
                       title: Text(
                         widget.pages[index].submenu[i].titulo,
                         style: TextStyle(
-                          color: textColor,
+                          color: textnavColor,
                           fontWeight: FontWeight.bold,
                         ),
                       ),
@@ -124,20 +125,18 @@ class _BarraLateralState extends State<BarraLateral> {
         return ListTile(
           leading: Icon(
             icon,
-            color: iconColor,
+            color: textnavColor,
           ),
           title: Text(
             text,
-            style: TextStyle(color: textColor, fontWeight: FontWeight.bold),
+            style: TextStyle(color: textnavColor, fontWeight: FontWeight.bold),
           ),
           onTap: () {
             if (widget.pages.length - 1 == index) {
               Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => widget.logoutPage));
             } else {
-              //setState(() {
               controladorPaginas.jumpToPage(index);
               openMenu = false;
-              //});
             }
           },
         );
@@ -148,16 +147,16 @@ class _BarraLateralState extends State<BarraLateral> {
         child: Container(
           width: 65,
           height: 60,
-          color: controladorPaginas.page == index ? Colors.blue[900] : corMenuConteudo,
+          color: controladorPaginas.page == index ? selectedColor : navColor,
           alignment: Alignment.centerRight,
           child: Container(
             width: 60,
             height: 60,
-            color: corMenuConteudo,
+            color: navColor,
             child: ListTile(
               leading: Icon(
                 icon,
-                color: iconColor,
+                color: textnavColor,
               ),
               onTap: () {
                 if (widget.pages[index].submenu != null) {
@@ -167,9 +166,7 @@ class _BarraLateralState extends State<BarraLateral> {
                   if (widget.pages.length - 1 == index) {
                     Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => widget.logoutPage));
                   } else {
-                    //setState(() {
                     controladorPaginas.jumpToPage(index);
-                    //});
                   }
                 }
               },
