@@ -1,7 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:layoutmenu/globalResponsivo.dart';
-import 'package:layoutmenu/layoutmenu.dart';
+
+import 'globalResponsivo.dart';
+import 'layoutmenu.dart';
 
 class BarraLateral extends StatefulWidget {
   String logo;
@@ -55,7 +56,9 @@ class _BarraLateralState extends State<BarraLateral> {
     return ListView.builder(
       itemCount: widget.pages.length,
       itemBuilder: (context, index) {
-        return widget.pages[index].visivel ? _menu(Colors.white, widget.pages[index].icone, Colors.white, widget.pages[index].titulo, index) : Container();
+        return widget.pages[index].visivel
+            ? _menu(Colors.white, widget.pages[index].icone, Colors.white, widget.pages[index].titulo, index)
+            : Container();
       },
     );
   }
@@ -105,9 +108,9 @@ class _BarraLateralState extends State<BarraLateral> {
                         if (widget.pages.length - 1 == index) {
                           Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => widget.logoutPage));
                         } else {
-                          setState(() {
-                            controladorPaginas.jumpToPage(index);
-                          });
+                          openMenu = false;
+                          if(controladorPaginas.page.round() != index) controladorPaginas.jumpToPage(index);
+                          controladorSubs[index].jumpToPage(i);
                         }
                       },
                     ),
@@ -131,9 +134,10 @@ class _BarraLateralState extends State<BarraLateral> {
             if (widget.pages.length - 1 == index) {
               Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => widget.logoutPage));
             } else {
-              setState(() {
-                controladorPaginas.jumpToPage(index);
-              });
+              //setState(() {
+              controladorPaginas.jumpToPage(index);
+              openMenu = false;
+              //});
             }
           },
         );
@@ -163,9 +167,9 @@ class _BarraLateralState extends State<BarraLateral> {
                   if (widget.pages.length - 1 == index) {
                     Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => widget.logoutPage));
                   } else {
-                    setState(() {
-                      controladorPaginas.jumpToPage(index);
-                    });
+                    //setState(() {
+                    controladorPaginas.jumpToPage(index);
+                    //});
                   }
                 }
               },

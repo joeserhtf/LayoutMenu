@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:layoutmenu/barraLateral.dart';
-import 'package:layoutmenu/globalResponsivo.dart';
+import 'barraLateral.dart';
+import 'globalResponsivo.dart';
 
 class LayoutMenu extends StatefulWidget {
   List<Widget> widgetsAcao;
@@ -79,10 +79,16 @@ class _LayoutMenuState extends State<LayoutMenu> {
       children: [
         Scaffold(
           appBar: _appBar(),
-          body: PageView(
-            physics: NeverScrollableScrollPhysics(),
-            controller: controladorPaginas,
-            children: widget.pages.map((e) => e.pagina).toList(),
+          body: Padding(
+            padding: const EdgeInsets.only(left: 65),
+            child: PageView(
+              physics: NeverScrollableScrollPhysics(),
+              controller: controladorPaginas,
+              children: [
+                for (int k = 0; k < widget.pages.length; k++)
+                  widget.pages[k].submenu == null ? pagina(widget.pages[k]) : _subList(widget.pages[k], k)
+              ],
+            ),
           ),
         ),
         StreamBuilder(
@@ -116,6 +122,11 @@ class _LayoutMenuState extends State<LayoutMenu> {
     );
   }
 
+  Widget pagina(ItemMenu e) {
+    controladorSubs.add(PageController(initialPage: 0));
+    return e.pagina;
+  }
+
   _appBar() {
     return AppBar(
       actions: widget.widgetsAcao,
@@ -145,6 +156,15 @@ class _LayoutMenuState extends State<LayoutMenu> {
       backgroundColor: corAppBarConteudo,
     );
   }
+
+  Widget _subList(ItemMenu e, index) {
+    controladorSubs.add(PageController(initialPage: 0));
+    return PageView(
+      physics: NeverScrollableScrollPhysics(),
+      controller: controladorSubs[index],
+      children: e.submenu.map((pag) => pag.pagina).toList(),
+    );
+  }
 }
 
 class ItemMenu {
@@ -160,6 +180,10 @@ class ItemMenu {
 class AcaoMenu {
   static void atualizar() {
     controllerAnimacao.add(true);
+  }
+
+  static getPage() {
+    return controladorPaginas.page;
   }
 
   static void goTo(int pageIndex) {

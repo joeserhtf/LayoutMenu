@@ -2,6 +2,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 
 PageController controladorPaginas = PageController(initialPage: 0);
+List<PageController> controladorSubs = [];
 StreamController controllerAnimacao = StreamController.broadcast();
 
 bool openMenu = false;
