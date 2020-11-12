@@ -1,7 +1,7 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 
-PageController controladorPaginas = PageController(initialPage: 0);
+PageController controladorPaginas = PageController(initialPage: 0, keepPage: false);
 List<PageController> controladorSubs = [];
 StreamController controllerAnimacao = StreamController.broadcast();
 
