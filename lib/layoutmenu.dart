@@ -189,8 +189,9 @@ class ItemMenu {
   String titulo;
   Widget pagina;
   List<ItemMenu> submenu;
+  Function function;
 
-  ItemMenu({@required this.icone, @required this.visivel, @required this.titulo, @required this.pagina, @required this.submenu});
+  ItemMenu({@required this.icone, @required this.visivel, @required this.titulo, @required this.pagina, @required this.submenu, this.function});
 }
 
 class AcaoMenu {

@@ -25,6 +25,15 @@ class MyApp extends StatelessWidget {
             pagina: Container(),
             submenu: null,
           ),
+          ItemMenu(
+              icone: Icons.ac_unit,
+              visivel: true,
+              titulo: 'null',
+              pagina: Container(),
+              submenu: null,
+              function: () {
+                print('olha eu aq');
+              }),
         ],
         versaoApp: '',
       ),

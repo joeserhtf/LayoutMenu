@@ -57,9 +57,7 @@ class _BarraLateralState extends State<BarraLateral> {
     return ListView.builder(
       itemCount: widget.pages.length,
       itemBuilder: (context, index) {
-        return widget.pages[index].visivel
-            ? _menu(widget.pages[index].icone, widget.pages[index].titulo, index)
-            : Container();
+        return widget.pages[index].visivel ? _menu(widget.pages[index].icone, widget.pages[index].titulo, index) : Container();
       },
     );
   }
@@ -76,7 +74,10 @@ class _BarraLateralState extends State<BarraLateral> {
             ),
             title: Text(
               text,
-              style: TextStyle(color: textnavColor, fontWeight: FontWeight.bold,),
+              style: TextStyle(
+                color: textnavColor,
+                fontWeight: FontWeight.bold,
+              ),
             ),
             trailing: Icon(
               Icons.keyboard_arrow_down,
@@ -110,9 +111,11 @@ class _BarraLateralState extends State<BarraLateral> {
                           Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => widget.logoutPage));
                         } else {
                           openMenu = false;
-                          if(controladorPaginas.page.round() != index) controladorPaginas.jumpToPage(index);
+                          if (controladorPaginas.page.round() != index) controladorPaginas.jumpToPage(index);
                           controladorSubs[index].jumpToPage(i);
                         }
+
+                        if (widget.pages[index].function != null) widget.pages[index].function();
                       },
                     ),
                   );
@@ -138,6 +141,7 @@ class _BarraLateralState extends State<BarraLateral> {
               controladorPaginas.jumpToPage(index);
               openMenu = false;
             }
+            if (widget.pages[index].function != null) widget.pages[index].function();
           },
         );
       }
@@ -169,6 +173,7 @@ class _BarraLateralState extends State<BarraLateral> {
                     controladorPaginas.jumpToPage(index);
                   }
                 }
+                if (widget.pages[index].function != null) widget.pages[index].function();
               },
             ),
           ),
