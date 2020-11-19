@@ -8,7 +8,7 @@ class BarraLateral extends StatefulWidget {
   String logo;
   String nomeApp;
   String versao;
-  List<ItemMenu> pages;
+  List<NavMenu> pages;
   Widget logoutPage;
 
   BarraLateral({this.logo, this.nomeApp, @required this.pages, @required this.versao, @required this.logoutPage});
@@ -25,7 +25,7 @@ class _BarraLateralState extends State<BarraLateral> {
       appBar: AppBar(
         title: Container(
           alignment: Alignment.center,
-          child: MediaQuery.of(context).size.width > 770 && openMenu == false
+          child: checkPlatformSize(context) && activeMenu == false
               ? Image.network(
                   widget.logo,
                   alignment: Alignment.center,
@@ -63,7 +63,7 @@ class _BarraLateralState extends State<BarraLateral> {
   }
 
   _menu(IconData icon, String text, int index) {
-    if (openMenu) {
+    if (activeMenu) {
       if (widget.pages[index].submenu != null) {
         return SingleChildScrollView(
           child: ExpansionTile(
@@ -90,9 +90,9 @@ class _BarraLateralState extends State<BarraLateral> {
                 physics: AlwaysScrollableScrollPhysics(),
                 itemBuilder: (context, i) {
                   return Container(
-                    width: (openMenu ? 300 : 65) * 0.9,
+                    width: (activeMenu ? 300 : 65) * 0.9,
                     child: ListTile(
-                      contentPadding: EdgeInsets.only(left: (openMenu ? 300 : 65) * 0.1),
+                      contentPadding: EdgeInsets.only(left: (activeMenu ? 300 : 65) * 0.1),
                       dense: true,
                       leading: Icon(
                         widget.pages[index].submenu[i].icone,
@@ -110,7 +110,7 @@ class _BarraLateralState extends State<BarraLateral> {
                         if (widget.pages.length - 1 == index) {
                           Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => widget.logoutPage));
                         } else {
-                          openMenu = false;
+                          activeMenu = false;
                           if (controladorPaginas.page.round() != index) controladorPaginas.jumpToPage(index);
                           controladorSubs[index].jumpToPage(i);
                         }
@@ -139,7 +139,7 @@ class _BarraLateralState extends State<BarraLateral> {
               Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => widget.logoutPage));
             } else {
               controladorPaginas.jumpToPage(index);
-              openMenu = false;
+              activeMenu = false;
             }
             if (widget.pages[index].function != null) widget.pages[index].function();
           },
@@ -164,7 +164,7 @@ class _BarraLateralState extends State<BarraLateral> {
               ),
               onTap: () {
                 if (widget.pages[index].submenu != null) {
-                  openMenu = true;
+                  activeMenu = true;
                   controllerAnimacao.add(true);
                 } else {
                   if (widget.pages.length - 1 == index) {

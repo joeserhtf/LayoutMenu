@@ -18,14 +18,14 @@ class MyApp extends StatelessWidget {
         logo: '',
         nomeApp: '',
         pages: [
-          ItemMenu(
+          NavMenu(
             icone: Icons.ac_unit,
             visivel: true,
             titulo: 'null',
             pagina: Container(),
             submenu: null,
           ),
-          ItemMenu(
+          NavMenu(
               icone: Icons.ac_unit,
               visivel: true,
               titulo: 'null',

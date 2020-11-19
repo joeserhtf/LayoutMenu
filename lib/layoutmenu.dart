@@ -4,7 +4,7 @@ import 'globalResponsivo.dart';
 
 class LayoutMenu extends StatefulWidget {
   List<Widget> widgetsAcao;
-  List<ItemMenu> pages;
+  List<NavMenu> pages;
   String nomeApp;
   String versaoApp;
   String logo;
@@ -54,7 +54,7 @@ class _LayoutMenuState extends State<LayoutMenu> {
     if (widget.textnavColor != null) textnavColor = widget.textnavColor;
     if (widget.selectedColor != null) selectedColor = widget.selectedColor;
 
-    widget.pages.add(ItemMenu(
+    widget.pages.add(NavMenu(
       icone: Icons.exit_to_app,
       visivel: true,
       titulo: 'Logout',
@@ -78,10 +78,10 @@ class _LayoutMenuState extends State<LayoutMenu> {
       body: GestureDetector(
         onHorizontalDragEnd: (mov) {
           if (mov.primaryVelocity > 0) {
-            openMenu = true;
+            activeMenu = true;
             controllerAnimacao.add(true);
           } else {
-            openMenu = false;
+            activeMenu = false;
             controllerAnimacao.add(true);
           }
         },
@@ -111,16 +111,16 @@ class _LayoutMenuState extends State<LayoutMenu> {
           stream: controllerAnimacao.stream,
           builder: (context, child) {
             return AnimatedPositioned(
-              left: MediaQuery.of(context).size.width > 770
+              left: checkPlatformSize(context)
                   ? 0
-                  : openMenu
+                  : activeMenu
                       ? 0
                       : -65,
               height: MediaQuery.of(context).size.height,
               duration: Duration(milliseconds: tempoAnimacao),
               child: AnimatedContainer(
                 duration: Duration(milliseconds: tempoAnimacao),
-                width: openMenu ? 300 : 65,
+                width: activeMenu ? 300 : 65,
                 height: 100,
                 color: navColor,
                 child: BarraLateral(
@@ -138,7 +138,7 @@ class _LayoutMenuState extends State<LayoutMenu> {
     );
   }
 
-  Widget pagina(ItemMenu e) {
+  Widget pagina(NavMenu e) {
     controladorSubs.add(PageController(initialPage: 0));
     return e.pagina;
   }
@@ -153,11 +153,22 @@ class _LayoutMenuState extends State<LayoutMenu> {
             builder: (context, child) {
               return AnimatedPadding(
                 duration: Duration(milliseconds: tempoAnimacao),
-                padding: EdgeInsets.only(left: openMenu ? 292 : 57, right: 16),
+                padding: EdgeInsets.only(
+                    left: checkPlatformSize(context)
+                        ? activeMenu
+                            ? 292
+                            : 57
+                        : activeMenu
+                            ? 292
+                            : 0,
+                    right: 16),
                 child: IconButton(
-                    icon: Icon(Icons.menu, color: textAppBarColor,),
+                    icon: Icon(
+                      Icons.menu,
+                      color: textAppBarColor,
+                    ),
                     onPressed: () {
-                      openMenu = !openMenu;
+                      activeMenu = !activeMenu;
                       controllerAnimacao.add(true);
                     }),
               );
@@ -165,7 +176,10 @@ class _LayoutMenuState extends State<LayoutMenu> {
           ),
           Padding(
             padding: EdgeInsets.only(bottom: 4),
-            child: Text(widget.pages[paginaAtual].titulo, style: TextStyle(color: textAppBarColor),),
+            child: Text(
+              widget.pages[paginaAtual].titulo,
+              style: TextStyle(color: textAppBarColor),
+            ),
           ),
         ],
       ),
@@ -173,7 +187,7 @@ class _LayoutMenuState extends State<LayoutMenu> {
     );
   }
 
-  Widget _subList(ItemMenu e, index) {
+  Widget _subList(NavMenu e, index) {
     controladorSubs.add(PageController(initialPage: 0));
     return PageView(
       physics: NeverScrollableScrollPhysics(),
@@ -183,15 +197,16 @@ class _LayoutMenuState extends State<LayoutMenu> {
   }
 }
 
-class ItemMenu {
+class NavMenu {
   IconData icone;
   bool visivel;
   String titulo;
   Widget pagina;
-  List<ItemMenu> submenu;
+  List<NavMenu> submenu;
   Function function;
 
-  ItemMenu({@required this.icone, @required this.visivel, @required this.titulo, @required this.pagina, @required this.submenu, this.function});
+  NavMenu(
+      {@required this.icone, @required this.visivel, @required this.titulo, @required this.pagina, @required this.submenu, this.function});
 }
 
 class AcaoMenu {

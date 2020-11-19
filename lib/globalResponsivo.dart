@@ -4,8 +4,9 @@ import 'package:flutter/material.dart';
 PageController controladorPaginas = PageController(initialPage: 0, keepPage: false);
 List<PageController> controladorSubs = [];
 StreamController controllerAnimacao = StreamController.broadcast();
+bool checkPlatformSize(BuildContext context) => MediaQuery.of(context).size.width > 770;
 
-bool openMenu = false;
+bool activeMenu = false;
 int tempoAnimacao = 300;
 
 Color appBarColor = Colors.blue[700].withOpacity(0.9);
