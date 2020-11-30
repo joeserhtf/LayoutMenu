@@ -105,12 +105,15 @@ class _BarraLateralState extends State<BarraLateral> {
                           fontWeight: FontWeight.bold,
                         ),
                       ),
-                      onTap: () {
+                      onTap: () async {
                         if (widget.pages.length - 1 == index) {
                           Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => widget.logoutPage));
                         } else {
                           activeMenu = false;
-                          if (controladorPaginas.page.round() != index) controladorPaginas.jumpToPage(index);
+                          if (controladorPaginas.page.round() != index) {
+                            controladorPaginas.jumpToPage(index);
+                            await Future.delayed(Duration(milliseconds: 100));
+                          }
                           controladorSubs[index].jumpToPage(i);
                         }
 
