@@ -22,18 +22,32 @@ class MyApp extends StatelessWidget {
             icone: Icons.ac_unit,
             visivel: true,
             titulo: 'null',
-            pagina: Container(),
+            pagina: Scaffold(
+              backgroundColor: Colors.blue,
+              body: Container(),
+            ),
             submenu: null,
           ),
           NavMenu(
               icone: Icons.ac_unit,
               visivel: true,
               titulo: 'null',
-              pagina: Container(),
+              pagina: Scaffold(
+                backgroundColor: Colors.grey,
+                body: Container(),
+              ),
               submenu: null,
-              function: () {
-                print('olha eu aq');
-              }),
+              function: () {}),
+          NavMenu(
+              icone: Icons.ac_unit,
+              visivel: true,
+              titulo: 'null',
+              pagina: Scaffold(
+                backgroundColor: Colors.green,
+                body: Container(),
+              ),
+              submenu: null,
+              function: () {}),
         ],
         versaoApp: '',
       ),

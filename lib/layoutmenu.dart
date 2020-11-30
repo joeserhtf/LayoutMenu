@@ -41,11 +41,12 @@ class LayoutMenu extends StatefulWidget {
 
 class _LayoutMenuState extends State<LayoutMenu> {
   int paginaAtual = 0;
+  PageController lcontroladorPaginas = PageController(initialPage: 0, keepPage: false);
 
   @override
   void initState() {
     super.initState();
-
+    controladorPaginas = lcontroladorPaginas;
     if (widget.appBarColor != null) appBarColor = widget.appBarColor;
     if (widget.headerColor != null) headerColor = widget.headerColor;
     if (widget.navColor != null) navColor = widget.navColor;
@@ -96,7 +97,7 @@ class _LayoutMenuState extends State<LayoutMenu> {
         Scaffold(
           appBar: _appBar(),
           body: Padding(
-            padding: const EdgeInsets.only(left: 65),
+            padding: EdgeInsets.only(left: checkPlatformSize(context) ? 65 : 0),
             child: PageView(
               physics: NeverScrollableScrollPhysics(),
               controller: controladorPaginas,
