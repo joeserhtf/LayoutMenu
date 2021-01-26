@@ -15,7 +15,7 @@ class MyApp extends StatelessWidget {
         primaryColor: Colors.orange,
       ),
       home: LayoutMenu(
-        logoutPage: Container(),
+        logoutPage: MyApp(),
         logo: '',
         appName: '',
         pages: [

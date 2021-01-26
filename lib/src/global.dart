@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 
 List<PageController> subMenusController = [];
 StreamController animationController = StreamController.broadcast();
-StreamController controllerInnerStream = StreamController();
+StreamController controllerInnerStream = StreamController.broadcast();
 PageController pagesController;
 bool checkPlatformSize(BuildContext context) =>
     MediaQuery.of(context).size.width > 770;
