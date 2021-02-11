@@ -215,11 +215,13 @@ class _SideBarState extends State<SideBar> {
           child: ExpansionTile(
             tilePadding: EdgeInsets.symmetric(horizontal: 8),
             initiallyExpanded: false,
-            title: Icon(
-              widget.pages[index].icon,
-              color: currentPageIndex.round() == index
-                  ? selectedColor
-                  : textNavigationColor,
+            title: Container(
+              child: Icon(
+                widget.pages[index].icon,
+                color: currentPageIndex.round() == index
+                    ? selectedColor
+                    : textNavigationColor,
+              ),
             ),
             children: <Widget>[
               ListView.builder(

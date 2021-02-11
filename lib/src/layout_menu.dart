@@ -42,8 +42,6 @@ class LayoutMenu extends StatefulWidget {
 }
 
 class _LayoutMenuState extends State<LayoutMenu> {
-  int currentPage = 0;
-
   @override
   void initState() {
     super.initState();
@@ -66,6 +64,8 @@ class _LayoutMenuState extends State<LayoutMenu> {
       page: Container(),
       subMenus: null,
     ));
+
+    currentPageWidget = widget.pages[0].page;
 
     globalPages = widget.pages;
   }
@@ -175,7 +175,7 @@ class _LayoutMenuState extends State<LayoutMenu> {
           Padding(
             padding: EdgeInsets.only(bottom: 4),
             child: Text(
-              widget.pages[currentPage].title,
+              _titleComposition(),
               style: TextStyle(color: textAppBarColor),
             ),
           ),
@@ -183,6 +183,18 @@ class _LayoutMenuState extends State<LayoutMenu> {
       ),
       backgroundColor: appBarColor,
     );
+  }
+
+  String _titleComposition() {
+    double subPageIndex = currentPageIndex % 1;
+    String title = '';
+    if (currentPageIndex % 1 != 0) {
+      title = "${widget.pages[currentPageIndex.round()].title} "
+          "- ${widget.pages[currentPageIndex.round()].subMenus[subPageIndex.round()].title}";
+    } else {
+      title = widget.pages[currentPageIndex.round()].title;
+    }
+    return title;
   }
 }
 
