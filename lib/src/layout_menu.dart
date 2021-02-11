@@ -43,13 +43,10 @@ class LayoutMenu extends StatefulWidget {
 
 class _LayoutMenuState extends State<LayoutMenu> {
   int currentPage = 0;
-  PageController pageController =
-      PageController(initialPage: 0, keepPage: false);
 
   @override
   void initState() {
     super.initState();
-    pagesController = pageController;
     if (widget.appBarColor != null) appBarColor = widget.appBarColor;
     if (widget.headerColor != null) headerColor = widget.headerColor;
     if (widget.navigationColor != null)
@@ -70,13 +67,7 @@ class _LayoutMenuState extends State<LayoutMenu> {
       subMenus: null,
     ));
 
-    pagesController.addListener(() {
-      if (pagesController.page.round() != currentPage) {
-        setState(() {
-          currentPage = pagesController.page.round();
-        });
-      }
-    });
+    globalPages = widget.pages;
   }
 
   @override
@@ -113,16 +104,7 @@ class _LayoutMenuState extends State<LayoutMenu> {
                 if (snapshot.data == false) {
                   return Container();
                 }
-                return PageView(
-                  physics: NeverScrollableScrollPhysics(),
-                  controller: pagesController,
-                  children: [
-                    for (int k = 0; k < widget.pages.length; k++)
-                      widget.pages[k].subMenus == null
-                          ? page(widget.pages[k])
-                          : _subList(widget.pages[k], k)
-                  ],
-                );
+                return currentPageWidget;
               },
             ),
           ),
@@ -158,11 +140,6 @@ class _LayoutMenuState extends State<LayoutMenu> {
     );
   }
 
-  Widget page(NavMenu e) {
-    subMenusController.add(PageController(initialPage: 0));
-    return e.page;
-  }
-
   _appBar() {
     return AppBar(
       actions: widget.actionWidgets,
@@ -174,14 +151,15 @@ class _LayoutMenuState extends State<LayoutMenu> {
               return AnimatedPadding(
                 duration: Duration(milliseconds: animationTime),
                 padding: EdgeInsets.only(
-                    left: checkPlatformSize(context)
-                        ? activeMenu
-                            ? 292
-                            : 57
-                        : activeMenu
-                            ? 292
-                            : 0,
-                    right: 16),
+                  left: checkPlatformSize(context)
+                      ? activeMenu
+                          ? 292
+                          : 57
+                      : activeMenu
+                          ? 292
+                          : 0,
+                  right: 16,
+                ),
                 child: IconButton(
                     icon: Icon(
                       Icons.menu,
@@ -206,15 +184,6 @@ class _LayoutMenuState extends State<LayoutMenu> {
       backgroundColor: appBarColor,
     );
   }
-
-  Widget _subList(NavMenu e, index) {
-    subMenusController.add(PageController(initialPage: 0));
-    return PageView(
-      physics: NeverScrollableScrollPhysics(),
-      controller: subMenusController[index],
-      children: e.subMenus.map((pag) => pag.page).toList(),
-    );
-  }
 }
 
 class ActionMenu {
@@ -225,10 +194,22 @@ class ActionMenu {
   }
 
   static getPage() {
-    return pagesController.page;
+    return currentPageIndex;
   }
 
-  static void goTo(int pageIndex) {
-    pagesController.jumpToPage(pageIndex);
+  static void goTo(double pageIndex) {
+    double subPageIndex = pageIndex % 1;
+    if (pageIndex % 1 != 0) {
+      currentPageWidget =
+          globalPages[pageIndex.round()].subMenus[subPageIndex.round()].page;
+      currentPageIndex = double.parse("${pageIndex.round()}.$subPageIndex");
+      controllerInnerStream.add(true);
+      animationController.add(true);
+    } else {
+      currentPageWidget = globalPages[pageIndex.round()].page;
+      currentPageIndex = pageIndex;
+      controllerInnerStream.add(true);
+      animationController.add(true);
+    }
   }
 }

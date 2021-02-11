@@ -2,15 +2,18 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 
-List<PageController> subMenusController = [];
+import 'nav_menu.dart';
+
 StreamController animationController = StreamController.broadcast();
 StreamController controllerInnerStream = StreamController.broadcast();
-PageController pagesController;
 bool checkPlatformSize(BuildContext context) =>
     MediaQuery.of(context).size.width > 770;
 
 bool activeMenu = false;
 int animationTime = 300;
+double currentPageIndex = 0;
+Widget currentPageWidget = Container();
+List<NavMenu> globalPages;
 
 Color appBarColor = Colors.blue[700].withOpacity(0.9);
 Color headerColor = Colors.blue[600].withOpacity(0.8);

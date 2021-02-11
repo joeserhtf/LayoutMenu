@@ -11,8 +11,7 @@ class MyApp extends StatelessWidget {
       title: 'LayoutMenu',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
-        primarySwatch: Colors.orange,
-        primaryColor: Colors.orange,
+        primarySwatch: Colors.grey,
       ),
       home: LayoutMenu(
         logoutPage: MyApp(),
