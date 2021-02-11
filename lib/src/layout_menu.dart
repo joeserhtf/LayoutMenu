@@ -193,7 +193,7 @@ class _LayoutMenuState extends State<LayoutMenu> {
     double subPageIndex = index % 1;
     if (index % 1 != 0) {
       return "${widget.pages[index.round()].title} "
-          "- ${widget.pages[index.round()].subMenus[subPageIndex.round()].title}";
+          "- ${widget.pages[index.round()].subMenus[((subPageIndex * 10).round() - 1)].title}";
     } else {
       return widget.pages[index.round()].title;
     }
@@ -214,9 +214,11 @@ class ActionMenu {
   static void goTo(double pageIndex) {
     double subPageIndex = pageIndex % 1;
     if (pageIndex % 1 != 0) {
-      currentPageWidget =
-          globalPages[pageIndex.round()].subMenus[subPageIndex.round()].page;
-      currentPageIndex = double.parse("${pageIndex.round()}.$subPageIndex");
+      currentPageWidget = globalPages[pageIndex.round()]
+          .subMenus[((subPageIndex * 10).round() - 1)]
+          .page;
+      currentPageIndex = double.parse(
+          "${pageIndex.round()}.${((subPageIndex * 10).round() - 1)}");
       controllerInnerStream.add(true);
       animationController.add(true);
     } else {
