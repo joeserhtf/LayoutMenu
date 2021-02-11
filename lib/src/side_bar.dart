@@ -213,9 +213,8 @@ class _SideBarState extends State<SideBar> {
       if (widget.pages[index].subMenus != null) {
         return SingleChildScrollView(
           child: ExpansionTile(
-            tilePadding: EdgeInsets.symmetric(horizontal: 20),
+            tilePadding: EdgeInsets.symmetric(horizontal: 8),
             initiallyExpanded: false,
-            trailing: Text(''),
             title: Icon(
               widget.pages[index].icon,
               color: currentPageIndex.round() == index
