@@ -132,6 +132,8 @@ class _SideBarState extends State<SideBar> {
                           ),
                           onTap: () async {
                             if (widget.pages.length - 1 == index) {
+                              currentPageWidget = widget.pages[0].page;
+                              currentPageIndex = 0;
                               Navigator.pushReplacement(
                                 context,
                                 MaterialPageRoute(
@@ -185,6 +187,8 @@ class _SideBarState extends State<SideBar> {
               ),
               onTap: () {
                 if (widget.pages.length - 1 == index) {
+                  currentPageWidget = widget.pages[0].page;
+                  currentPageIndex = 0;
                   Navigator.pushReplacement(
                     context,
                     MaterialPageRoute(builder: (context) => widget.logoutPage),
@@ -213,7 +217,7 @@ class _SideBarState extends State<SideBar> {
             initiallyExpanded: false,
             trailing: Text(''),
             title: Icon(
-              icon,
+              widget.pages[index].icon,
               color: currentPageIndex.round() == index
                   ? selectedColor
                   : textNavigationColor,
@@ -239,12 +243,14 @@ class _SideBarState extends State<SideBar> {
                         color: navigationColor,
                         child: InkWell(
                           child: Icon(
-                            icon,
+                            widget.pages[index].subMenus[i].icon,
                             color: textNavigationColor,
                             size: 14,
                           ),
                           onTap: () {
                             if (widget.pages.length - 1 == index) {
+                              currentPageWidget = widget.pages[0].page;
+                              currentPageIndex = 0;
                               Navigator.pushReplacement(
                                 context,
                                 MaterialPageRoute(
@@ -298,6 +304,8 @@ class _SideBarState extends State<SideBar> {
                     animationController.add(true);
                   } else {
                     if (widget.pages.length - 1 == index) {
+                      currentPageWidget = widget.pages[0].page;
+                      currentPageIndex = 0;
                       Navigator.pushReplacement(
                         context,
                         MaterialPageRoute(
