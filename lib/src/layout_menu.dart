@@ -148,36 +148,40 @@ class _LayoutMenuState extends State<LayoutMenu> {
           StreamBuilder(
             stream: animationController.stream,
             builder: (context, child) {
-              return AnimatedPadding(
-                duration: Duration(milliseconds: animationTime),
-                padding: EdgeInsets.only(
-                  left: checkPlatformSize(context)
-                      ? activeMenu
-                          ? 292
-                          : 57
-                      : activeMenu
-                          ? 292
-                          : 0,
-                  right: 16,
-                ),
-                child: IconButton(
-                    icon: Icon(
-                      Icons.menu,
-                      color: textAppBarColor,
+              return Row(
+                children: [
+                  AnimatedPadding(
+                    duration: Duration(milliseconds: animationTime),
+                    padding: EdgeInsets.only(
+                      left: checkPlatformSize(context)
+                          ? activeMenu
+                              ? 292
+                              : 57
+                          : activeMenu
+                              ? 292
+                              : 0,
+                      right: 16,
                     ),
-                    onPressed: () {
-                      activeMenu = !activeMenu;
-                      animationController.add(true);
-                    }),
+                    child: IconButton(
+                        icon: Icon(
+                          Icons.menu,
+                          color: textAppBarColor,
+                        ),
+                        onPressed: () {
+                          activeMenu = !activeMenu;
+                          animationController.add(true);
+                        }),
+                  ),
+                  Padding(
+                    padding: EdgeInsets.only(bottom: 4),
+                    child: Text(
+                      _titleComposition(currentPageIndex),
+                      style: TextStyle(color: textAppBarColor),
+                    ),
+                  ),
+                ],
               );
             },
-          ),
-          Padding(
-            padding: EdgeInsets.only(bottom: 4),
-            child: Text(
-              _titleComposition(),
-              style: TextStyle(color: textAppBarColor),
-            ),
           ),
         ],
       ),
@@ -185,16 +189,14 @@ class _LayoutMenuState extends State<LayoutMenu> {
     );
   }
 
-  String _titleComposition() {
-    double subPageIndex = currentPageIndex % 1;
-    String title = '';
-    if (currentPageIndex % 1 != 0) {
-      title = "${widget.pages[currentPageIndex.round()].title} "
-          "- ${widget.pages[currentPageIndex.round()].subMenus[subPageIndex.round()].title}";
+  _titleComposition(double index) {
+    double subPageIndex = index % 1;
+    if (index % 1 != 0) {
+      return "${widget.pages[index.round()].title} "
+          "- ${widget.pages[index.round()].subMenus[subPageIndex.round()].title}";
     } else {
-      title = widget.pages[currentPageIndex.round()].title;
+      return widget.pages[index.round()].title;
     }
-    return title;
   }
 }
 

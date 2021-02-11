@@ -21,14 +21,14 @@ class MyApp extends StatelessWidget {
           NavMenu(
             icon: Icons.ac_unit,
             visible: true,
-            title: 'null',
+            title: 'a',
             page: Container(),
             subMenus: null,
           ),
           NavMenu(
               icon: Icons.ac_unit,
               visible: true,
-              title: 'null',
+              title: 'b',
               page: Scaffold(
                 backgroundColor: Colors.grey,
                 body: Container(),
@@ -38,7 +38,7 @@ class MyApp extends StatelessWidget {
           NavMenu(
               icon: Icons.ac_unit,
               visible: true,
-              title: 'null',
+              title: 'c',
               page: Scaffold(
                 backgroundColor: Colors.green,
                 body: Container(),
@@ -47,7 +47,7 @@ class MyApp extends StatelessWidget {
                 NavMenu(
                   icon: Icons.ac_unit,
                   visible: true,
-                  title: 'null',
+                  title: 'd',
                   page: Scaffold(
                     backgroundColor: Colors.purple,
                     body: Container(),
@@ -57,7 +57,7 @@ class MyApp extends StatelessWidget {
                 NavMenu(
                   icon: Icons.ac_unit,
                   visible: true,
-                  title: 'null',
+                  title: 'e',
                   page: Scaffold(
                     backgroundColor: Colors.red,
                     body: Container(),
