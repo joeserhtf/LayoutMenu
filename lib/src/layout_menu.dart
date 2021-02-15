@@ -125,12 +125,22 @@ class _LayoutMenuState extends State<LayoutMenu> {
                 width: activeMenu ? 300 : 65,
                 height: 100,
                 color: navigationColor,
-                child: SideBar(
-                  logo: widget.logo,
-                  appName: widget.appName,
-                  version: widget.appVersion,
-                  pages: widget.pages,
-                  logoutPage: widget.logoutPage,
+                child: MouseRegion(
+                  onEnter: (__) {
+                    activeMenu = true;
+                    animationController.add(true);
+                  },
+                  onExit: (__) {
+                    activeMenu = false;
+                    animationController.add(true);
+                  },
+                  child: SideBar(
+                    logo: widget.logo,
+                    appName: widget.appName,
+                    version: widget.appVersion,
+                    pages: widget.pages,
+                    logoutPage: widget.logoutPage,
+                  ),
                 ),
               ),
             );
