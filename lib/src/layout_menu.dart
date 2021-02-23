@@ -19,6 +19,7 @@ class LayoutMenu extends StatefulWidget {
   Color textHeaderColor;
   Color selectedColor;
   Widget logoutPage;
+  bool hoverAction;
 
   LayoutMenu({
     this.actionWidgets,
@@ -35,6 +36,7 @@ class LayoutMenu extends StatefulWidget {
     this.textNavigationColor,
     this.selectedColor,
     @required this.logoutPage,
+    this.hoverAction = true,
   });
 
   @override
@@ -126,14 +128,18 @@ class _LayoutMenuState extends State<LayoutMenu> {
                 height: 100,
                 color: navigationColor,
                 child: MouseRegion(
-                  onEnter: (__) {
-                    activeMenu = true;
-                    animationController.add(true);
-                  },
-                  onExit: (__) {
-                    activeMenu = false;
-                    animationController.add(true);
-                  },
+                  onEnter: widget.hoverAction
+                      ? (__) {
+                          activeMenu = true;
+                          animationController.add(true);
+                        }
+                      : null,
+                  onExit: widget.hoverAction
+                      ? (__) {
+                          activeMenu = false;
+                          animationController.add(true);
+                        }
+                      : null,
                   child: SideBar(
                     logo: widget.logo,
                     appName: widget.appName,

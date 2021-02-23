@@ -17,6 +17,7 @@ class MyApp extends StatelessWidget {
         logoutPage: MyApp(),
         logo: '',
         appName: '',
+        hoverAction: false,
         pages: [
           NavMenu(
             icon: Icons.ac_unit,
