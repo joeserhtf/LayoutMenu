@@ -60,7 +60,7 @@ class _LayoutMenuState extends State<LayoutMenu> {
     if (widget.selectedColor != null) selectedColor = widget.selectedColor;
 
     widget.pages.add(NavMenu(
-      icon: Icons.exit_to_app,
+      icon: Icon(Icons.exit_to_app),
       visible: true,
       title: 'Logout',
       page: Container(),

@@ -20,14 +20,14 @@ class MyApp extends StatelessWidget {
         hoverAction: false,
         pages: [
           NavMenu(
-            icon: Icons.ac_unit,
+            icon: Icon(Icons.ac_unit),
             visible: true,
             title: 'a',
             page: Container(),
             subMenus: null,
           ),
           NavMenu(
-              icon: Icons.ac_unit,
+              icon: Icon(Icons.ac_unit),
               visible: true,
               title: 'b',
               page: Scaffold(
@@ -37,7 +37,7 @@ class MyApp extends StatelessWidget {
               subMenus: null,
               function: () {}),
           NavMenu(
-              icon: Icons.ac_unit,
+              icon: Icon(Icons.ac_unit),
               visible: true,
               title: 'c',
               page: Scaffold(
@@ -46,7 +46,7 @@ class MyApp extends StatelessWidget {
               ),
               subMenus: [
                 NavMenu(
-                  icon: Icons.ac_unit,
+                  icon: Icon(Icons.ac_unit),
                   visible: true,
                   title: 'd',
                   page: Scaffold(
@@ -56,7 +56,7 @@ class MyApp extends StatelessWidget {
                   subMenus: null,
                 ),
                 NavMenu(
-                  icon: Icons.ac_unit,
+                  icon: Icon(Icons.ac_unit),
                   visible: true,
                   title: 'e',
                   page: Scaffold(
@@ -66,7 +66,7 @@ class MyApp extends StatelessWidget {
                   subMenus: null,
                 ),
                 NavMenu(
-                  icon: Icons.ac_unit,
+                  icon: Icon(Icons.ac_unit),
                   visible: true,
                   title: 'null',
                   page: Scaffold(

@@ -77,17 +77,27 @@ class _SideBarState extends State<SideBar> {
     );
   }
 
-  _menu(IconData icon, String text, int index) {
+  _menu(Widget icon, String text, int index) {
     if (activeMenu) {
       if (widget.pages[index].subMenus != null) {
         return SingleChildScrollView(
           child: ExpansionTile(
             initiallyExpanded: false,
-            leading: Icon(
-              icon,
-              color: currentPageIndex.round() == index
-                  ? selectedColor
-                  : textNavigationColor,
+            leading: ConstrainedBox(
+              constraints: BoxConstraints(
+                maxHeight: 24,
+                maxWidth: 24,
+              ),
+              child: Theme(
+                data: ThemeData(
+                  iconTheme: IconThemeData(
+                    color: currentPageIndex.round() == index
+                        ? selectedColor
+                        : textNavigationColor,
+                  ),
+                ),
+                child: icon,
+              ),
             ),
             title: Text(
               text,
@@ -118,10 +128,18 @@ class _SideBarState extends State<SideBar> {
                           contentPadding: EdgeInsets.only(
                               left: (activeMenu ? 300 : 65) * 0.1),
                           dense: true,
-                          leading: Icon(
-                            widget.pages[index].subMenus[i].icon,
-                            color: textNavigationColor,
-                            size: 14,
+                          leading: ConstrainedBox(
+                            constraints: BoxConstraints(
+                              maxHeight: 14,
+                              maxWidth: 14,
+                            ),
+                            child: Theme(
+                              data: ThemeData(
+                                iconTheme:
+                                    IconThemeData(color: textNavigationColor),
+                              ),
+                              child: widget.pages[index].subMenus[i].icon,
+                            ),
                           ),
                           title: Text(
                             widget.pages[index].subMenus[i].title,
@@ -174,9 +192,17 @@ class _SideBarState extends State<SideBar> {
               alignment: Alignment.centerRight,
             ),
             ListTile(
-              leading: Icon(
-                icon,
-                color: textNavigationColor,
+              leading: ConstrainedBox(
+                constraints: BoxConstraints(
+                  maxHeight: 24,
+                  maxWidth: 24,
+                ),
+                child: Theme(
+                  data: ThemeData(
+                    iconTheme: IconThemeData(color: textNavigationColor),
+                  ),
+                  child: icon,
+                ),
               ),
               title: Text(
                 text,
@@ -215,12 +241,20 @@ class _SideBarState extends State<SideBar> {
           child: ExpansionTile(
             tilePadding: EdgeInsets.symmetric(horizontal: 8),
             initiallyExpanded: false,
-            title: Container(
-              child: Icon(
-                widget.pages[index].icon,
-                color: currentPageIndex.round() == index
-                    ? selectedColor
-                    : textNavigationColor,
+            title: ConstrainedBox(
+              constraints: BoxConstraints(
+                maxHeight: 24,
+                maxWidth: 24,
+              ),
+              child: Theme(
+                data: ThemeData(
+                  iconTheme: IconThemeData(
+                    color: currentPageIndex.round() == index
+                        ? selectedColor
+                        : textNavigationColor,
+                  ),
+                ),
+                child: widget.pages[index].icon,
               ),
             ),
             children: <Widget>[
@@ -243,10 +277,19 @@ class _SideBarState extends State<SideBar> {
                         height: 50,
                         color: navigationColor,
                         child: InkWell(
-                          child: Icon(
-                            widget.pages[index].subMenus[i].icon,
-                            color: textNavigationColor,
-                            size: 14,
+                          child: ConstrainedBox(
+                            constraints: BoxConstraints(
+                              maxHeight: 14,
+                              maxWidth: 14,
+                            ),
+                            child: Theme(
+                              data: ThemeData(
+                                iconTheme: IconThemeData(
+                                  color: textNavigationColor,
+                                ),
+                              ),
+                              child: widget.pages[index].subMenus[i].icon,
+                            ),
                           ),
                           onTap: () {
                             if (widget.pages.length - 1 == index) {
@@ -294,9 +337,19 @@ class _SideBarState extends State<SideBar> {
               height: 60,
               color: navigationColor,
               child: ListTile(
-                leading: Icon(
-                  icon,
-                  color: textNavigationColor,
+                leading: ConstrainedBox(
+                  constraints: BoxConstraints(
+                    maxHeight: 24,
+                    maxWidth: 24,
+                  ),
+                  child: Theme(
+                    data: ThemeData(
+                      iconTheme: IconThemeData(
+                        color: textNavigationColor,
+                      ),
+                    ),
+                    child: icon,
+                  ),
                 ),
                 onTap: () {
                   if (widget.pages[index].subMenus != null) {

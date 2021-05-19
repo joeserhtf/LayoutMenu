@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class NavMenu {
-  IconData icon;
+  Widget icon;
   bool visible;
   String title;
   Widget page;
