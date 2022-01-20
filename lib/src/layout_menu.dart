@@ -19,9 +19,10 @@ class LayoutMenu extends StatefulWidget {
   Color? textHeaderColor;
   Color? selectedColor;
   Widget logoutPage;
-  bool hoverAction;
+  bool onHoverEnter;
+  bool onHoverExit;
   bool hasAppBar;
-  bool dragAction;
+  bool onDragExpand;
 
   LayoutMenu({
     this.actionWidgets,
@@ -38,8 +39,9 @@ class LayoutMenu extends StatefulWidget {
     this.textNavigationColor,
     this.selectedColor,
     required this.logoutPage,
-    this.hoverAction = true,
-    this.dragAction = false,
+    this.onHoverEnter = false,
+    this.onHoverExit = true,
+    this.onDragExpand = false,
     this.hasAppBar = true,
   });
 
@@ -80,7 +82,7 @@ class _LayoutMenuState extends State<LayoutMenu> {
       floatingActionButton: widget.actionButton,
       drawerScrimColor: Colors.transparent,
       body: GestureDetector(
-        onHorizontalDragEnd: widget.dragAction
+        onHorizontalDragEnd: widget.onDragExpand
             ? (mov) {
                 if (mov.primaryVelocity! > 0) {
                   activeMenu = true;
@@ -126,7 +128,8 @@ class _LayoutMenuState extends State<LayoutMenu> {
                 pages: widget.pages,
                 logoutPage: widget.logoutPage,
                 hasAppBar: widget.hasAppBar,
-                hoverAction: widget.hoverAction,
+                onHoverExit: widget.onHoverExit,
+                onHoverEnter: widget.onHoverEnter,
               ),
             );
           },

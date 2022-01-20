@@ -13,7 +13,8 @@ class SideBar extends StatefulWidget {
   List<NavMenu> pages;
   Widget logoutPage;
   bool hasAppBar;
-  bool hoverAction;
+  bool onHoverEnter;
+  bool onHoverExit;
 
   SideBar({
     required this.logo,
@@ -22,7 +23,8 @@ class SideBar extends StatefulWidget {
     this.version,
     required this.logoutPage,
     required this.hasAppBar,
-    required this.hoverAction,
+    required this.onHoverEnter,
+    required this.onHoverExit,
   });
 
   @override
@@ -61,7 +63,7 @@ class _SideBarState extends State<SideBar> {
             minHeight: MediaQuery.of(context).size.height - kToolbarHeight,
             maxHeight: MediaQuery.of(context).size.height - kToolbarHeight,
           ),
-          child: _menu(Container(), "", 0),
+          child: _menu(),
         ),
       ],
     );
@@ -108,11 +110,11 @@ class _SideBarState extends State<SideBar> {
     );
   }
 
-  Widget _menu(Widget icon, String text, int index) {
+  Widget _menu() {
     if (activeMenu) {
       return MouseRegion(
         //Todo new bool to separate enter and exit
-        onExit: true /*widget.hoverAction*/
+        onExit: widget.onHoverExit
             ? (__) {
                 activeMenu = false;
                 animationController.add(true);
@@ -122,7 +124,7 @@ class _SideBarState extends State<SideBar> {
       );
     } else {
       return MouseRegion(
-        onEnter: widget.hoverAction
+        onEnter: widget.onHoverEnter
             ? (__) {
                 activeMenu = true;
                 animationController.add(true);

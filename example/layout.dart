@@ -16,8 +16,8 @@ class MyApp extends StatelessWidget {
         logoutPage: MyApp(),
         logo: Icon(Icons.pages),
         appName: 'LayoutMenu',
-        hoverAction: false,
-        hasAppBar: true,
+        onHoverEnter: false,
+        hasAppBar: false,
         pages: [
           NavMenu(
             icon: Icon(
@@ -25,7 +25,7 @@ class MyApp extends StatelessWidget {
               color: Colors.white,
             ),
             visible: true,
-            title: 'a',
+            title: 'Menu 1',
             page: Container(),
           ),
           NavMenu(
@@ -34,7 +34,7 @@ class MyApp extends StatelessWidget {
                 color: Colors.white,
               ),
               visible: true,
-              title: 'b',
+              title: 'DashBoard',
               page: Scaffold(
                 backgroundColor: Colors.grey,
                 body: Container(),
@@ -46,28 +46,28 @@ class MyApp extends StatelessWidget {
               color: Colors.white,
             ),
             visible: true,
-            title: 'c',
+            title: 'Categories',
             page: Scaffold(
               backgroundColor: Colors.green,
               body: Container(),
             ),
             subMenus: [
               SubMenu(
-                title: 'd',
+                title: 'Purple Main',
                 page: Scaffold(
                   backgroundColor: Colors.purple,
                   body: Container(),
                 ),
               ),
               SubMenu(
-                title: 'e',
+                title: 'Red Main',
                 page: Scaffold(
                   backgroundColor: Colors.red,
                   body: Container(),
                 ),
               ),
               SubMenu(
-                title: 'Categorias',
+                title: 'Yellow Menu',
                 page: Scaffold(
                   backgroundColor: Colors.yellowAccent,
                   body: Container(),
