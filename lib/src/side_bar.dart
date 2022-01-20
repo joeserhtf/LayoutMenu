@@ -1,22 +1,28 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:layoutmenu/src/app_bar.dart';
+import 'package:layoutmenu/src/expanded_side.dart';
+import 'package:layoutmenu/src/small_side.dart';
 
 import '../layout.dart';
 import 'global.dart';
 
 class SideBar extends StatefulWidget {
-  String logo;
+  Widget logo;
   String appName;
-  String version;
+  String? version;
   List<NavMenu> pages;
   Widget logoutPage;
+  bool hasAppBar;
+  bool hoverAction;
 
   SideBar({
-    this.logo,
-    this.appName,
-    @required this.pages,
-    @required this.version,
-    @required this.logoutPage,
+    required this.logo,
+    required this.appName,
+    required this.pages,
+    this.version,
+    required this.logoutPage,
+    required this.hasAppBar,
+    required this.hoverAction,
   });
 
   @override
@@ -24,19 +30,61 @@ class SideBar extends StatefulWidget {
 }
 
 class _SideBarState extends State<SideBar> {
+  List<NavMenu> get pages => widget.pages;
+
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: navigationColor,
-      appBar: AppBar(
-        title: Container(
+    return _listMenus();
+  }
+
+  _listMenus() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Row(
+          children: [
+            _leadingSideBar(),
+            if (widget.hasAppBar) ...{
+              Expanded(
+                  child: CustomAppBar(
+                pages: widget.pages,
+                actionWidgets: [],
+              )),
+            }
+          ],
+        ),
+        ConstrainedBox(
+          constraints: BoxConstraints(
+            maxWidth: 300,
+            minWidth: 65,
+            //TODO creat variables
+            minHeight: MediaQuery.of(context).size.height - kToolbarHeight,
+            maxHeight: MediaQuery.of(context).size.height - kToolbarHeight,
+          ),
+          child: _menu(Container(), "", 0),
+        ),
+      ],
+    );
+  }
+
+  _leadingSideBar() {
+    return Container(
+      width: activeMenu ? 300 : 65,
+      child: Card(
+        color: headerColor,
+        margin: EdgeInsets.zero,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.zero),
+        child: Container(
+          height: kToolbarHeight,
           alignment: Alignment.center,
+          color: headerColor,
+          //Todo check checkPlatformSize
           child: checkPlatformSize(context) && activeMenu == false
-              ? Image.network(
-                  widget.logo,
-                  alignment: Alignment.center,
+              ? Center(
+                  child: widget.logo,
                 )
               : Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Text(
                       widget.appName,
@@ -47,7 +95,7 @@ class _SideBarState extends State<SideBar> {
                       ),
                     ),
                     Text(
-                      'Versão: ' + widget.version ?? 'Deconhecida',
+                      'Versão: ' + (widget.version ?? 'Deconhecida'),
                       style: TextStyle(
                         fontSize: 11,
                         color: textHeaderColor,
@@ -56,333 +104,32 @@ class _SideBarState extends State<SideBar> {
                   ],
                 ),
         ),
-        backgroundColor: headerColor,
       ),
-      body: _listMenus(),
     );
   }
 
-  _listMenus() {
-    return ListView.builder(
-      itemCount: widget.pages.length,
-      itemBuilder: (context, index) {
-        return widget.pages[index].visible
-            ? _menu(
-                widget.pages[index].icon,
-                widget.pages[index].title,
-                index,
-              )
-            : Container();
-      },
-    );
-  }
-
-  _menu(Widget icon, String text, int index) {
+  Widget _menu(Widget icon, String text, int index) {
     if (activeMenu) {
-      if (widget.pages[index].subMenus != null) {
-        return SingleChildScrollView(
-          child: ExpansionTile(
-            initiallyExpanded: false,
-            leading: ConstrainedBox(
-              constraints: BoxConstraints(
-                maxHeight: 24,
-                maxWidth: 24,
-              ),
-              child: Theme(
-                data: ThemeData(
-                  iconTheme: IconThemeData(
-                    color: currentPageIndex.round() == index
-                        ? selectedColor
-                        : textNavigationColor,
-                  ),
-                ),
-                child: icon,
-              ),
-            ),
-            title: Text(
-              text,
-              style: TextStyle(
-                color: textNavigationColor,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-            children: <Widget>[
-              ListView.builder(
-                shrinkWrap: true,
-                itemCount: widget.pages[index].subMenus.length,
-                physics: AlwaysScrollableScrollPhysics(),
-                itemBuilder: (context, i) {
-                  return Container(
-                    height: 50,
-                    child: Stack(
-                      children: [
-                        Container(
-                          width: 5,
-                          color: currentPageIndex ==
-                                  double.parse("$index.${i + 1}")
-                              ? selectedColor
-                              : navigationColor,
-                          alignment: Alignment.centerRight,
-                        ),
-                        ListTile(
-                          contentPadding: EdgeInsets.only(
-                              left: (activeMenu ? 300 : 65) * 0.1),
-                          dense: true,
-                          leading: ConstrainedBox(
-                            constraints: BoxConstraints(
-                              maxHeight: 14,
-                              maxWidth: 14,
-                            ),
-                            child: Theme(
-                              data: ThemeData(
-                                iconTheme:
-                                    IconThemeData(color: textNavigationColor),
-                              ),
-                              child: widget.pages[index].subMenus[i].icon,
-                            ),
-                          ),
-                          title: Text(
-                            widget.pages[index].subMenus[i].title,
-                            style: TextStyle(
-                              color: textNavigationColor,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                          onTap: () async {
-                            if (widget.pages.length - 1 == index) {
-                              currentPageWidget = widget.pages[0].page;
-                              currentPageIndex = 0;
-                              Navigator.pushReplacement(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => widget.logoutPage,
-                                ),
-                              );
-                            } else {
-                              activeMenu = false;
-                              currentPageWidget =
-                                  widget.pages[index].subMenus[i].page;
-                              currentPageIndex =
-                                  double.parse("$index.${i + 1}");
-                              controllerInnerStream.add(true);
-                              animationController.add(true);
-                            }
-
-                            if (widget.pages[index].function != null) {
-                              widget.pages[index].function();
-                            }
-                          },
-                        ),
-                      ],
-                    ),
-                  );
-                },
-              ),
-            ],
-          ),
-        );
-      } else {
-        return Stack(
-          children: [
-            Container(
-              width: 5,
-              height: 60,
-              color:
-                  currentPageIndex == index ? selectedColor : navigationColor,
-              alignment: Alignment.centerRight,
-            ),
-            ListTile(
-              leading: ConstrainedBox(
-                constraints: BoxConstraints(
-                  maxHeight: 24,
-                  maxWidth: 24,
-                ),
-                child: Theme(
-                  data: ThemeData(
-                    iconTheme: IconThemeData(color: textNavigationColor),
-                  ),
-                  child: icon,
-                ),
-              ),
-              title: Text(
-                text,
-                style: TextStyle(
-                  color: textNavigationColor,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-              onTap: () {
-                if (widget.pages.length - 1 == index) {
-                  currentPageWidget = widget.pages[0].page;
-                  currentPageIndex = 0;
-                  Navigator.pushReplacement(
-                    context,
-                    MaterialPageRoute(builder: (context) => widget.logoutPage),
-                  );
-                } else {
-                  currentPageIndex = double.parse(index.toString());
-                  currentPageWidget = widget.pages[index].page;
-                  controllerInnerStream.add(true);
-                  animationController.add(true);
-                  activeMenu = false;
-                  //pagesController.jumpToPage(index);
-                }
-                if (widget.pages[index].function != null) {
-                  widget.pages[index].function();
-                }
-              },
-            ),
-          ],
-        );
-      }
+      return MouseRegion(
+        //Todo new bool to separate enter and exit
+        onExit: true /*widget.hoverAction*/
+            ? (__) {
+                activeMenu = false;
+                animationController.add(true);
+              }
+            : null,
+        child: ExpandedSide(menus: pages),
+      );
     } else {
-      if (widget.pages[index].subMenus != null) {
-        return SingleChildScrollView(
-          child: ExpansionTile(
-            tilePadding: EdgeInsets.symmetric(horizontal: 8),
-            initiallyExpanded: false,
-            title: ConstrainedBox(
-              constraints: BoxConstraints(
-                maxHeight: 24,
-                maxWidth: 24,
-              ),
-              child: Theme(
-                data: ThemeData(
-                  iconTheme: IconThemeData(
-                    color: currentPageIndex.round() == index
-                        ? selectedColor
-                        : textNavigationColor,
-                  ),
-                ),
-                child: widget.pages[index].icon,
-              ),
-            ),
-            children: <Widget>[
-              ListView.builder(
-                shrinkWrap: true,
-                itemCount: widget.pages[index].subMenus.length,
-                physics: AlwaysScrollableScrollPhysics(),
-                itemBuilder: (context, i) {
-                  return Tooltip(
-                    message: widget.pages[index].subMenus[i].title,
-                    child: Container(
-                      width: 5,
-                      height: 50,
-                      color: currentPageIndex == double.parse("$index.${i + 1}")
-                          ? selectedColor
-                          : navigationColor,
-                      alignment: Alignment.centerRight,
-                      child: Container(
-                        width: 60,
-                        height: 50,
-                        color: navigationColor,
-                        child: InkWell(
-                          child: ConstrainedBox(
-                            constraints: BoxConstraints(
-                              maxHeight: 14,
-                              maxWidth: 14,
-                            ),
-                            child: Theme(
-                              data: ThemeData(
-                                iconTheme: IconThemeData(
-                                  color: textNavigationColor,
-                                ),
-                              ),
-                              child: widget.pages[index].subMenus[i].icon,
-                            ),
-                          ),
-                          onTap: () {
-                            if (widget.pages.length - 1 == index) {
-                              currentPageWidget = widget.pages[0].page;
-                              currentPageIndex = 0;
-                              Navigator.pushReplacement(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => widget.logoutPage,
-                                ),
-                              );
-                            } else {
-                              activeMenu = false;
-                              currentPageWidget =
-                                  widget.pages[index].subMenus[i].page;
-                              currentPageIndex =
-                                  double.parse("$index.${i + 1}");
-                              controllerInnerStream.add(true);
-                              animationController.add(true);
-                            }
-
-                            if (widget.pages[index].function != null) {
-                              widget.pages[index].function();
-                            }
-                          },
-                        ),
-                      ),
-                    ),
-                  );
-                },
-              ),
-            ],
-          ),
-        );
-      } else {
-        return Tooltip(
-          message: text,
-          child: Container(
-            width: 5,
-            height: 60,
-            color: currentPageIndex == index ? selectedColor : navigationColor,
-            alignment: Alignment.centerRight,
-            child: Container(
-              width: 60,
-              height: 60,
-              color: navigationColor,
-              child: ListTile(
-                leading: ConstrainedBox(
-                  constraints: BoxConstraints(
-                    maxHeight: 24,
-                    maxWidth: 24,
-                  ),
-                  child: Theme(
-                    data: ThemeData(
-                      iconTheme: IconThemeData(
-                        color: textNavigationColor,
-                      ),
-                    ),
-                    child: icon,
-                  ),
-                ),
-                onTap: () {
-                  if (widget.pages[index].subMenus != null) {
-                    //Todo make expandable without activating menu
-                    activeMenu = true;
-                    animationController.add(true);
-                  } else {
-                    if (widget.pages.length - 1 == index) {
-                      currentPageWidget = widget.pages[0].page;
-                      currentPageIndex = 0;
-                      Navigator.pushReplacement(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => widget.logoutPage,
-                        ),
-                      );
-                    } else {
-                      currentPageIndex = double.parse(index.toString());
-                      currentPageWidget = widget.pages[index].page;
-                      controllerInnerStream.add(true);
-                      animationController.add(true);
-                      //pagesController.jumpToPage(index);
-                    }
-                  }
-                  if (widget.pages[index].function != null) {
-                    widget.pages[index].function();
-                  }
-                },
-              ),
-            ),
-          ),
-        );
-      }
+      return MouseRegion(
+        onEnter: widget.hoverAction
+            ? (__) {
+                activeMenu = true;
+                animationController.add(true);
+              }
+            : null,
+        child: SmallSideBar(menus: pages),
+      );
     }
   }
 }
