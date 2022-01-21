@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:layoutmenu/layout.dart';
 import 'package:layoutmenu/src/app_bar.dart';
 import 'package:layoutmenu/src/expanded_side.dart';
+import 'package:layoutmenu/src/global.dart';
 import 'package:layoutmenu/src/small_side.dart';
-
-import '../layout.dart';
-import 'global.dart';
+import 'package:layoutmenu/src/utils/media_query.dart';
 
 class SideBar extends StatefulWidget {
   Widget logo;
@@ -36,10 +36,6 @@ class _SideBarState extends State<SideBar> {
 
   @override
   Widget build(BuildContext context) {
-    return _listMenus();
-  }
-
-  _listMenus() {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -57,9 +53,8 @@ class _SideBarState extends State<SideBar> {
         ),
         ConstrainedBox(
           constraints: BoxConstraints(
-            maxWidth: 300,
-            minWidth: 65,
-            //TODO creat variables
+            maxWidth: maxWithBar,
+            minWidth: minWithBar,
             minHeight: MediaQuery.of(context).size.height - kToolbarHeight,
             maxHeight: MediaQuery.of(context).size.height - kToolbarHeight,
           ),
@@ -71,17 +66,19 @@ class _SideBarState extends State<SideBar> {
 
   _leadingSideBar() {
     return Container(
-      width: activeMenu ? 300 : 65,
+      width: activeMenu ? maxWithBar : minWithBar,
       child: Card(
         color: headerColor,
         margin: EdgeInsets.zero,
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.zero),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.only(
+            topRight: !widget.hasAppBar ? Radius.circular(6) : Radius.zero,
+          ),
+        ),
         child: Container(
           height: kToolbarHeight,
           alignment: Alignment.center,
-          color: headerColor,
-          //Todo check checkPlatformSize
-          child: checkPlatformSize(context) && activeMenu == false
+          child: !isLargeScreen(context) || activeMenu == false
               ? Center(
                   child: widget.logo,
                 )
@@ -92,14 +89,14 @@ class _SideBarState extends State<SideBar> {
                       widget.appName,
                       textAlign: TextAlign.center,
                       style: TextStyle(
-                        fontWeight: FontWeight.bold,
+                        fontWeight: FontWeight.w600,
                         color: textHeaderColor,
                       ),
                     ),
                     Text(
                       'Versão: ' + (widget.version ?? 'Deconhecida'),
                       style: TextStyle(
-                        fontSize: 11,
+                        fontSize: mediaQuery(context, 0.01).clamp(11, 16),
                         color: textHeaderColor,
                       ),
                     ),
@@ -113,14 +110,15 @@ class _SideBarState extends State<SideBar> {
   Widget _menu() {
     if (activeMenu) {
       return MouseRegion(
-        //Todo new bool to separate enter and exit
         onExit: widget.onHoverExit
             ? (__) {
                 activeMenu = false;
                 animationController.add(true);
               }
             : null,
-        child: ExpandedSide(menus: pages),
+        child: ExpandedSide(
+          menus: pages,
+        ),
       );
     } else {
       return MouseRegion(
@@ -130,7 +128,10 @@ class _SideBarState extends State<SideBar> {
                 animationController.add(true);
               }
             : null,
-        child: SmallSideBar(menus: pages),
+        child: SmallSideBar(
+          menus: pages,
+          roundBorder: !widget.hasAppBar,
+        ),
       );
     }
   }

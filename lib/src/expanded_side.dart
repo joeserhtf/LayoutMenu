@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:layoutmenu/src/global.dart';
 import 'package:layoutmenu/src/nav_menu.dart';
+import 'package:layoutmenu/src/utils/media_query.dart';
 
 class ExpandedSide extends StatefulWidget {
   final List<NavMenu> menus;
@@ -18,7 +19,7 @@ class _ExpandedSideState extends State<ExpandedSide> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: 300,
+      width: maxWithBar,
       color: navigationColor,
       child: ListView.builder(
         itemCount: menus.length,
@@ -42,7 +43,8 @@ class _ExpandedSideState extends State<ExpandedSide> {
               title: Text(
                 menu.title,
                 style: TextStyle(
-                  color: Colors.white,
+                  color: textNavigationColor,
+                  fontWeight: FontWeight.w600,
                 ),
               ),
             );
@@ -58,7 +60,9 @@ class _ExpandedSideState extends State<ExpandedSide> {
             title: Text(
               menu.title,
               style: TextStyle(
-                color: Colors.white,
+                color: textNavigationColor,
+                fontSize: mediaQuery(context, 0.015).clamp(14, 17),
+                fontWeight: FontWeight.w600,
               ),
             ),
             trailing: Icon(
@@ -77,7 +81,6 @@ class _ExpandedSideState extends State<ExpandedSide> {
   }
 
   Widget _subMenuButton(SubMenu subMenu) {
-    print(subMenu.menuIndex);
     return ListTile(
       visualDensity: VisualDensity.compact,
       dense: true,
@@ -99,9 +102,8 @@ class _ExpandedSideState extends State<ExpandedSide> {
           child: Text(
             subMenu.title,
             style: TextStyle(
-              fontSize: 14,
-              color: Colors.grey,
-              fontWeight: FontWeight.w600,
+              fontSize: mediaQuery(context, 0.015).clamp(12, 15),
+              color: textNavigationColor,
             ),
           ),
         ),

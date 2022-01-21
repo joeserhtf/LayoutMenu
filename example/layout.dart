@@ -17,7 +17,7 @@ class MyApp extends StatelessWidget {
         logo: Icon(Icons.pages),
         appName: 'LayoutMenu',
         onHoverEnter: false,
-        hasAppBar: false,
+        hasAppBar: true,
         pages: [
           NavMenu(
             icon: Icon(
@@ -29,17 +29,18 @@ class MyApp extends StatelessWidget {
             page: Container(),
           ),
           NavMenu(
-              icon: Icon(
-                Icons.ac_unit,
-                color: Colors.white,
-              ),
-              visible: true,
-              title: 'DashBoard',
-              page: Scaffold(
-                backgroundColor: Colors.grey,
-                body: Container(),
-              ),
-              function: () {}),
+            icon: Icon(
+              Icons.ac_unit,
+              color: Colors.white,
+            ),
+            visible: true,
+            title: 'DashBoard',
+            page: Scaffold(
+              backgroundColor: Colors.grey,
+              body: Container(),
+            ),
+            function: () {},
+          ),
           NavMenu(
             icon: Icon(
               Icons.ac_unit,

@@ -7,12 +7,16 @@ import 'nav_menu.dart';
 StreamController animationController = StreamController.broadcast();
 StreamController controllerInnerStream = StreamController();
 
-bool checkPlatformSize(BuildContext context) => MediaQuery.of(context).size.width > 770;
+bool isLargeScreen(BuildContext context) => MediaQuery.of(context).size.width > 770;
 
 bool activeMenu = false;
 bool activeSubMenu = false;
 double subMenuIndex = -1;
 int animationTime = 300;
+
+double maxWithBar = 300;
+double minWithBar = 65;
+
 double currentPageIndex = 0;
 Widget currentPageWidget = Container();
 List<NavMenu>? globalPages;

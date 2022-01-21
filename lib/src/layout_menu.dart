@@ -63,7 +63,10 @@ class _LayoutMenuState extends State<LayoutMenu> {
 
     widget.pages.add(
       NavMenu(
-        icon: Icon(Icons.exit_to_app),
+        icon: Icon(
+          Icons.exit_to_app,
+          color: textNavigationColor,
+        ),
         visible: true,
         title: 'Logout',
         page: widget.logoutPage,
@@ -103,7 +106,7 @@ class _LayoutMenuState extends State<LayoutMenu> {
       children: [
         Padding(
           padding: EdgeInsets.only(
-            left: checkPlatformSize(context) ? 65 : 0,
+            left: isLargeScreen(context) ? minWithBar : 0,
             top: widget.hasAppBar ? kToolbarHeight : 0.0,
           ),
           child: StreamBuilder(

@@ -1,11 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:layoutmenu/src/global.dart';
 import 'package:layoutmenu/src/nav_menu.dart';
+import 'package:layoutmenu/src/utils/media_query.dart';
 
 class SmallSideBar extends StatefulWidget {
   final List<NavMenu> menus;
+  final bool roundBorder;
 
-  const SmallSideBar({Key? key, required this.menus}) : super(key: key);
+  const SmallSideBar({
+    Key? key,
+    required this.menus,
+    this.roundBorder = false,
+  }) : super(key: key);
 
   @override
   _SmallSideBarState createState() => _SmallSideBarState();
@@ -13,6 +19,7 @@ class SmallSideBar extends StatefulWidget {
 
 class _SmallSideBarState extends State<SmallSideBar> {
   List<NavMenu> get menus => widget.menus;
+  bool onSidebar = false;
 
   @override
   Widget build(BuildContext context) {
@@ -21,9 +28,14 @@ class _SmallSideBarState extends State<SmallSideBar> {
       mainAxisSize: MainAxisSize.min,
       children: [
         Container(
-          width: 65,
+          width: minWithBar,
           height: size.height,
-          color: navigationColor,
+          decoration: BoxDecoration(
+            color: navigationColor,
+            borderRadius: BorderRadius.only(
+              bottomRight: widget.roundBorder ? Radius.circular(6) : Radius.zero,
+            ),
+          ),
           child: ListView.builder(
             itemCount: menus.length,
             itemBuilder: (context, index) {
@@ -33,18 +45,30 @@ class _SmallSideBarState extends State<SmallSideBar> {
           ),
         ),
         if (activeSubMenu) ...{
-          Container(
-            width: 135,
-            height: size.height,
-            child: Stack(
-              children: [
-                Positioned(
-                  top: subMenuIndex * 64,
-                  child: Container(
-                    child: _subList(menus[subMenuIndex.toInt()].subMenus),
-                  ),
-                )
-              ],
+          MouseRegion(
+            onEnter: (_) {
+              onSidebar = true;
+            },
+            onExit: (_) {
+              if (onSidebar) {
+                onSidebar = false;
+                activeSubMenu = false;
+                animationController.add(true);
+              }
+            },
+            child: Container(
+              width: 135,
+              height: size.height,
+              child: Stack(
+                children: [
+                  Positioned(
+                    top: subMenuIndex * 64,
+                    child: Container(
+                      child: _subList(menus[subMenuIndex.toInt()].subMenus),
+                    ),
+                  )
+                ],
+              ),
             ),
           )
         }
@@ -89,6 +113,7 @@ class _SmallSideBarState extends State<SmallSideBar> {
                   currentPageWidget = menu.page;
                   currentPageIndex = 0;
                   activeSubMenu = false;
+                  onSidebar = false;
                   Navigator.pushReplacement(
                     context,
                     MaterialPageRoute(
@@ -132,8 +157,8 @@ class _SmallSideBarState extends State<SmallSideBar> {
             child: Text(
               menus[subMenuIndex.toInt()].title,
               style: TextStyle(
-                fontSize: 21,
-                color: Colors.white,
+                fontSize: mediaQuery(context, 0.015).clamp(16, 18),
+                color: textNavigationColor,
                 fontWeight: FontWeight.bold,
               ),
             ),
@@ -146,7 +171,7 @@ class _SmallSideBarState extends State<SmallSideBar> {
                 dense: true,
                 onTap: () {
                   activeSubMenu = false;
-
+                  onSidebar = false;
                   currentPageIndex = double.parse("${menus[subMenuIndex.toInt()].menuIndex}.${subMenu.menuIndex}");
 
                   currentPageWidget = subMenu.page;
@@ -163,8 +188,8 @@ class _SmallSideBarState extends State<SmallSideBar> {
                     child: Text(
                       subMenu.title,
                       style: TextStyle(
-                        fontSize: 14,
-                        color: Colors.white,
+                        fontSize: mediaQuery(context, 0.015).clamp(12, 14),
+                        color: textNavigationColor,
                       ),
                     ),
                   ),
