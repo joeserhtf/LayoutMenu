@@ -36,31 +36,34 @@ class _SideBarState extends State<SideBar> {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Row(
-          children: [
-            _leadingSideBar(),
-            if (widget.hasAppBar) ...{
-              Expanded(
-                  child: CustomAppBar(
-                pages: widget.pages,
-                actionWidgets: [],
-              )),
-            }
-          ],
-        ),
-        ConstrainedBox(
-          constraints: BoxConstraints(
-            maxWidth: maxWithBar,
-            minWidth: minWithBar,
-            minHeight: MediaQuery.of(context).size.height - kToolbarHeight,
-            maxHeight: MediaQuery.of(context).size.height - kToolbarHeight,
+    return Padding(
+      padding: !widget.hasAppBar ? const EdgeInsets.symmetric(vertical: 2) : EdgeInsets.zero,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              _leadingSideBar(),
+              if (widget.hasAppBar) ...{
+                Expanded(
+                    child: CustomAppBar(
+                  pages: widget.pages,
+                  actionWidgets: [],
+                )),
+              }
+            ],
           ),
-          child: _menu(),
-        ),
-      ],
+          ConstrainedBox(
+            constraints: BoxConstraints(
+              maxWidth: maxWithBar,
+              minWidth: minWithBar,
+              minHeight: MediaQuery.of(context).size.height - (kToolbarHeight + (!widget.hasAppBar ? 4 : 0)),
+              maxHeight: (MediaQuery.of(context).size.height - (kToolbarHeight + (!widget.hasAppBar ? 4 : 0))),
+            ),
+            child: _menu(),
+          ),
+        ],
+      ),
     );
   }
 

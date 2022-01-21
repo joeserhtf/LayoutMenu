@@ -17,7 +17,7 @@ class MyApp extends StatelessWidget {
         logo: Icon(Icons.pages),
         appName: 'LayoutMenu',
         onHoverEnter: false,
-        hasAppBar: true,
+        hasAppBar: false,
         pages: [
           NavMenu(
             icon: Icon(
