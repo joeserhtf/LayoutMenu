@@ -4,8 +4,9 @@ import 'package:layoutmenu/layout.dart';
 import 'global.dart';
 
 class CustomAppBar extends StatelessWidget {
-  List<Widget>? actionWidgets;
-  List<NavMenu> pages;
+  final List<Widget>? actionWidgets;
+  final List<NavPage> pages;
+
   CustomAppBar({Key? key, this.actionWidgets, required this.pages}) : super(key: key);
 
   @override

@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:layoutmenu/src/global.dart';
-import 'package:layoutmenu/src/nav_menu.dart';
+import 'package:layoutmenu/src/nav_page.dart';
 import 'package:layoutmenu/src/utils/media_query.dart';
 
 class ExpandedSide extends StatefulWidget {
-  final List<NavMenu> menus;
+  final List<NavPage> menus;
 
   const ExpandedSide({Key? key, required this.menus}) : super(key: key);
 
@@ -13,7 +13,7 @@ class ExpandedSide extends StatefulWidget {
 }
 
 class _ExpandedSideState extends State<ExpandedSide> {
-  List<NavMenu> get menus => widget.menus;
+  List<NavPage> get menus => widget.menus;
   int selectedIndex = currentPage.menuIndex.toInt();
 
   @override
@@ -26,7 +26,7 @@ class _ExpandedSideState extends State<ExpandedSide> {
           ListView.builder(
             itemCount: menus.length,
             itemBuilder: (BuildContext context, int index) {
-              NavMenu menu = menus[index];
+              NavPage menu = menus[index];
               if (menu.subMenus == null) {
                 return _tileNavPage(menu);
               }
@@ -41,7 +41,7 @@ class _ExpandedSideState extends State<ExpandedSide> {
     );
   }
 
-  _tileNavPage(NavMenu menu) {
+  _tileNavPage(NavPage menu) {
     return ListTile(
       onTap: () {
         if (menu.isLogout) {
@@ -76,7 +76,7 @@ class _ExpandedSideState extends State<ExpandedSide> {
     );
   }
 
-  _expansionNavPage(NavMenu menu) {
+  _expansionNavPage(NavPage menu) {
     bool selected = selectedIndex == menu.menuIndex;
     return ExpansionTile(
       onExpansionChanged: (z) {
@@ -104,7 +104,7 @@ class _ExpandedSideState extends State<ExpandedSide> {
     );
   }
 
-  Widget _subMenuButton(SubMenu subMenu) {
+  Widget _subMenuButton(SubPage subMenu) {
     return ListTile(
       visualDensity: VisualDensity.compact,
       dense: true,
@@ -112,7 +112,7 @@ class _ExpandedSideState extends State<ExpandedSide> {
         activeMenu = false;
         activeSubMenu = false;
 
-        currentPage = NavMenu.copy(menus[selectedIndex])..activeSubMenu = subMenu;
+        currentPage = NavPage.copy(menus[selectedIndex])..activeSubMenu = subMenu;
 
         controllerInnerStream.add(true);
         animationController.add(true);

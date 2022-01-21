@@ -19,7 +19,7 @@ class MyApp extends StatelessWidget {
         onHoverEnter: false,
         hasAppBar: false,
         pages: [
-          NavMenu(
+          NavPage(
             icon: Icon(
               Icons.ac_unit,
               color: Colors.white,
@@ -28,7 +28,7 @@ class MyApp extends StatelessWidget {
             title: 'Menu 1',
             page: Container(),
           ),
-          NavMenu(
+          NavPage(
             icon: Icon(
               Icons.ac_unit,
               color: Colors.white,
@@ -41,7 +41,7 @@ class MyApp extends StatelessWidget {
             ),
             function: () {},
           ),
-          NavMenu(
+          NavPage(
             icon: Icon(
               Icons.ac_unit,
               color: Colors.white,
@@ -53,21 +53,21 @@ class MyApp extends StatelessWidget {
               body: Container(),
             ),
             subMenus: [
-              SubMenu(
+              SubPage(
                 title: 'Purple Main',
                 page: Scaffold(
                   backgroundColor: Colors.purple,
                   body: Container(),
                 ),
               ),
-              SubMenu(
+              SubPage(
                 title: 'Red Main',
                 page: Scaffold(
                   backgroundColor: Colors.red,
                   body: Container(),
                 ),
               ),
-              SubMenu(
+              SubPage(
                 title: 'Yellow Menu',
                 page: Scaffold(
                   backgroundColor: Colors.yellowAccent,
@@ -77,7 +77,7 @@ class MyApp extends StatelessWidget {
             ],
             function: () {},
           ),
-          NavMenu(
+          NavPage(
             icon: Icon(
               Icons.ac_unit,
               color: Colors.white,
@@ -89,21 +89,21 @@ class MyApp extends StatelessWidget {
               body: Container(),
             ),
             subMenus: [
-              SubMenu(
+              SubPage(
                 title: 'Purple Main',
                 page: Scaffold(
                   backgroundColor: Colors.purple,
                   body: Container(),
                 ),
               ),
-              SubMenu(
+              SubPage(
                 title: 'Red Main',
                 page: Scaffold(
                   backgroundColor: Colors.red,
                   body: Container(),
                 ),
               ),
-              SubMenu(
+              SubPage(
                 title: 'Yellow Menu',
                 page: Scaffold(
                   backgroundColor: Colors.yellowAccent,
@@ -114,7 +114,7 @@ class MyApp extends StatelessWidget {
             function: () {},
           ),
         ],
-        logoutNav: NavMenu(
+        logoutNav: NavPage(
           icon: Icon(
             Icons.exit_to_app,
             color: Colors.white,

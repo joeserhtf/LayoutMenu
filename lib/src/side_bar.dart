@@ -7,18 +7,20 @@ import 'package:layoutmenu/src/small_side.dart';
 import 'package:layoutmenu/src/utils/media_query.dart';
 
 class SideBar extends StatefulWidget {
-  Widget logo;
-  String appName;
-  String? version;
-  List<NavMenu> pages;
-  bool hasAppBar;
-  bool onHoverEnter;
-  bool onHoverExit;
+  final Widget logo;
+  final String appName;
+  final String? version;
+  final List<NavPage> pages;
+  final bool hasAppBar;
+  final bool onHoverEnter;
+  final bool onHoverExit;
+  final actionWidgets;
 
   SideBar({
     required this.logo,
     required this.appName,
     required this.pages,
+    required this.actionWidgets,
     this.version,
     required this.hasAppBar,
     required this.onHoverEnter,
@@ -30,7 +32,7 @@ class SideBar extends StatefulWidget {
 }
 
 class _SideBarState extends State<SideBar> {
-  List<NavMenu> get pages => widget.pages;
+  List<NavPage> get pages => widget.pages;
 
   @override
   Widget build(BuildContext context) {
@@ -46,7 +48,7 @@ class _SideBarState extends State<SideBar> {
                 Expanded(
                     child: CustomAppBar(
                   pages: pages,
-                  actionWidgets: [],
+                  actionWidgets: widget.actionWidgets ?? [],
                 )),
               }
             ],

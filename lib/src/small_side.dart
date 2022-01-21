@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:layoutmenu/src/global.dart';
-import 'package:layoutmenu/src/nav_menu.dart';
+import 'package:layoutmenu/src/nav_page.dart';
 import 'package:layoutmenu/src/utils/media_query.dart';
 
 class SmallSideBar extends StatefulWidget {
-  final List<NavMenu> menus;
+  final List<NavPage> menus;
   final bool roundBorder;
 
   const SmallSideBar({
@@ -20,7 +20,7 @@ class SmallSideBar extends StatefulWidget {
 class _SmallSideBarState extends State<SmallSideBar> {
   double mousePosition = 64;
 
-  List<NavMenu> get menus => widget.menus;
+  List<NavPage> get menus => widget.menus;
   bool onSidebar = false;
 
   @override
@@ -106,7 +106,7 @@ class _SmallSideBarState extends State<SmallSideBar> {
             : null;
   }
 
-  _simpleMenuIcon(NavMenu menu) {
+  _simpleMenuIcon(NavPage menu) {
     return MouseRegion(
       onHover: (details) {
         mousePosition = details.position.dy / 64;
@@ -171,7 +171,7 @@ class _SmallSideBarState extends State<SmallSideBar> {
     );
   }
 
-  _subList(List<SubMenu>? submenus) {
+  _subList(List<SubPage>? submenus) {
     return Container(
       width: floatMenuWidth,
       decoration: BoxDecoration(
@@ -204,7 +204,7 @@ class _SmallSideBarState extends State<SmallSideBar> {
                   activeSubMenu = false;
                   onSidebar = false;
 
-                  currentPage = NavMenu.copy(menus[subMenuIndex.toInt()])..activeSubMenu = subMenu;
+                  currentPage = NavPage.copy(menus[subMenuIndex.toInt()])..activeSubMenu = subMenu;
 
                   controllerInnerStream.add(true);
                   animationController.add(true);

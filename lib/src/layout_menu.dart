@@ -1,30 +1,30 @@
 import 'package:flutter/material.dart';
 
 import 'global.dart';
-import 'nav_menu.dart';
+import 'nav_page.dart';
 import 'side_bar.dart';
 
 class LayoutMenu extends StatefulWidget {
-  List<Widget>? actionWidgets;
-  List<NavMenu> pages;
-  String? initialPageKey;
-  String appName;
-  String appVersion;
-  Widget logo;
-  Widget? actionButton;
-  Color? appBarColor;
-  Color? navigationColor;
-  Color? headerColor;
-  Color? textAppBarColor;
-  Color? textNavigationColor;
-  Color? textHeaderColor;
-  Color? selectedColor;
-  NavMenu? logoutNav;
-  bool onHoverEnter;
-  bool onHoverExit;
-  bool hasAppBar;
-  bool onDragExpand;
-  double? floatWidth;
+  final List<Widget>? actionWidgets;
+  final List<NavPage> pages;
+  final String? initialPageKey;
+  final String appName;
+  final String appVersion;
+  final Widget logo;
+  final Widget? actionButton;
+  final Color? appBarColor;
+  final Color? navigationColor;
+  final Color? headerColor;
+  final Color? textAppBarColor;
+  final Color? textNavigationColor;
+  final Color? textHeaderColor;
+  final Color? selectedColor;
+  final NavPage? logoutNav;
+  final bool onHoverEnter;
+  final bool onHoverExit;
+  final bool hasAppBar;
+  final bool onDragExpand;
+  final double? floatWidth;
 
   LayoutMenu({
     this.actionWidgets,
@@ -111,10 +111,11 @@ class _LayoutMenuState extends State<LayoutMenu> {
                 logo: widget.logo,
                 appName: widget.appName,
                 version: widget.appVersion,
-                pages: globalPages?.cast<NavMenu>() ?? [],
+                pages: globalPages?.cast<NavPage>() ?? [],
                 hasAppBar: widget.hasAppBar,
                 onHoverExit: widget.onHoverExit,
                 onHoverEnter: widget.onHoverEnter,
+                actionWidgets: widget.actionWidgets,
               ),
             );
           },
@@ -172,16 +173,16 @@ class ActionMenu {
   }
 
   static void goTo(String pageKey) {
-    NavMenu? toPage;
+    NavPage? toPage;
 
     toPage = globalPages?.firstWhere(
       (page) => page?.key == pageKey && !page!.isLogout,
       orElse: () {
-        for (NavMenu? mainPage in globalPages ?? []) {
+        for (NavPage? mainPage in globalPages ?? []) {
           if (mainPage!.subMenus != null && mainPage.subMenus!.isNotEmpty) {
-            for (SubMenu element in mainPage.subMenus!) {
+            for (SubPage element in mainPage.subMenus!) {
               if (element.key == pageKey) {
-                toPage = NavMenu.copy(mainPage)..activeSubMenu = element;
+                toPage = NavPage.copy(mainPage)..activeSubMenu = element;
                 break;
               }
             }

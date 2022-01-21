@@ -1,19 +1,19 @@
 import 'package:flutter/material.dart';
 
-class NavMenu {
+class NavPage {
   String? key;
   Widget icon;
   bool visible;
   String title;
   Widget page;
-  List<SubMenu>? subMenus;
+  List<SubPage>? subMenus;
   Function? function;
   bool isLogout = false;
   double menuIndex = -1.0;
 
-  SubMenu? activeSubMenu;
+  SubPage? activeSubMenu;
 
-  NavMenu({
+  NavPage({
     required this.icon,
     required this.title,
     required this.page,
@@ -23,7 +23,7 @@ class NavMenu {
     this.function,
   });
 
-  NavMenu.copy(NavMenu pageOrigin)
+  NavPage.copy(NavPage pageOrigin)
       : key = pageOrigin.key,
         icon = pageOrigin.icon,
         visible = pageOrigin.visible,
@@ -34,14 +34,14 @@ class NavMenu {
         menuIndex = pageOrigin.menuIndex;
 }
 
-class SubMenu {
+class SubPage {
   String? key;
   String title;
   Widget page;
   Function? function;
   double menuIndex = -1.0;
 
-  SubMenu({
+  SubPage({
     required this.title,
     required this.page,
     this.function,

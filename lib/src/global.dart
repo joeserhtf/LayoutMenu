@@ -2,7 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 
-import 'nav_menu.dart';
+import 'nav_page.dart';
 
 StreamController animationController = StreamController.broadcast();
 StreamController controllerInnerStream = StreamController();
@@ -22,11 +22,11 @@ double floatMenuWidth = 185;
 
 String? initialPageKey;
 
-NavMenu currentPage = NavMenu(title: '', icon: Icon(Icons.circle), page: Container());
-NavMenu initialPage = NavMenu(title: '', icon: Icon(Icons.circle), page: Container());
+NavPage currentPage = NavPage(title: '', icon: Icon(Icons.circle), page: Container());
+NavPage initialPage = NavPage(title: '', icon: Icon(Icons.circle), page: Container());
 
-List<NavMenu?>? globalPages;
-NavMenu? logOutPage;
+List<NavPage?>? globalPages;
+NavPage? logOutPage;
 bool logOutOnScroll = false;
 
 Color appBarColor = Colors.blue[700]!.withOpacity(0.9);
