@@ -7,6 +7,7 @@ import 'side_bar.dart';
 class LayoutMenu extends StatefulWidget {
   List<Widget>? actionWidgets;
   List<NavMenu> pages;
+  String? initialPageKey;
   String appName;
   String appVersion;
   Widget logo;
@@ -18,11 +19,12 @@ class LayoutMenu extends StatefulWidget {
   Color? textNavigationColor;
   Color? textHeaderColor;
   Color? selectedColor;
-  Widget logoutPage;
+  NavMenu? logoutNav;
   bool onHoverEnter;
   bool onHoverExit;
   bool hasAppBar;
   bool onDragExpand;
+  double? floatWidth;
 
   LayoutMenu({
     this.actionWidgets,
@@ -30,6 +32,7 @@ class LayoutMenu extends StatefulWidget {
     required this.appName,
     required this.appVersion,
     required this.logo,
+    this.initialPageKey,
     this.actionButton,
     this.appBarColor,
     this.headerColor,
@@ -38,11 +41,12 @@ class LayoutMenu extends StatefulWidget {
     this.textHeaderColor,
     this.textNavigationColor,
     this.selectedColor,
-    required this.logoutPage,
+    this.logoutNav,
     this.onHoverEnter = false,
     this.onHoverExit = true,
     this.onDragExpand = false,
     this.hasAppBar = true,
+    this.floatWidth,
   });
 
   @override
@@ -53,37 +57,16 @@ class _LayoutMenuState extends State<LayoutMenu> {
   @override
   void initState() {
     super.initState();
-    if (widget.appBarColor != null) appBarColor = widget.appBarColor!;
-    if (widget.headerColor != null) headerColor = widget.headerColor!;
-    if (widget.navigationColor != null) navigationColor = widget.navigationColor!;
-    if (widget.textAppBarColor != null) textAppBarColor = widget.textAppBarColor!;
-    if (widget.textHeaderColor != null) textHeaderColor = widget.textHeaderColor!;
-    if (widget.textNavigationColor != null) textNavigationColor = widget.textNavigationColor!;
-    if (widget.selectedColor != null) selectedColor = widget.selectedColor!;
-
-    widget.pages.add(
-      NavMenu(
-        icon: Icon(
-          Icons.exit_to_app,
-          color: textNavigationColor,
-        ),
-        visible: true,
-        title: 'Logout',
-        page: widget.logoutPage,
-        subMenus: null,
-      )..isLogout = true,
-    );
-
-    currentPageWidget = widget.pages[0].page;
-
-    globalPages = widget.pages;
+    _checkAndConfig();
   }
 
   @override
   Widget build(BuildContext context) {
+    _checkLogOutButton();
     return Scaffold(
       floatingActionButton: widget.actionButton,
       drawerScrimColor: Colors.transparent,
+      //backgroundColor: Colors.transparent,
       body: GestureDetector(
         onHorizontalDragEnd: widget.onDragExpand
             ? (mov) {
@@ -106,7 +89,7 @@ class _LayoutMenuState extends State<LayoutMenu> {
       children: [
         Padding(
           padding: EdgeInsets.only(
-            left: isLargeScreen(context) ? minWithBar : 0,
+            left: isLargeScreen(context) ? minWidthBar : 0,
             top: widget.hasAppBar ? kToolbarHeight : 0.0,
           ),
           child: StreamBuilder(
@@ -115,7 +98,7 @@ class _LayoutMenuState extends State<LayoutMenu> {
               if (snapshot.data == false) {
                 return Container();
               }
-              return currentPageWidget;
+              return currentPage.activeSubMenu?.page ?? currentPage.page;
             },
           ),
         ),
@@ -128,8 +111,7 @@ class _LayoutMenuState extends State<LayoutMenu> {
                 logo: widget.logo,
                 appName: widget.appName,
                 version: widget.appVersion,
-                pages: widget.pages,
-                logoutPage: widget.logoutPage,
+                pages: globalPages?.cast<NavMenu>() ?? [],
                 hasAppBar: widget.hasAppBar,
                 onHoverExit: widget.onHoverExit,
                 onHoverEnter: widget.onHoverEnter,
@@ -139,6 +121,42 @@ class _LayoutMenuState extends State<LayoutMenu> {
         ),
       ],
     );
+  }
+
+  void _checkAndConfig() {
+    if (widget.appBarColor != null) appBarColor = widget.appBarColor!;
+    if (widget.headerColor != null) headerColor = widget.headerColor!;
+    if (widget.navigationColor != null) navigationColor = widget.navigationColor!;
+    if (widget.textAppBarColor != null) textAppBarColor = widget.textAppBarColor!;
+    if (widget.textHeaderColor != null) textHeaderColor = widget.textHeaderColor!;
+    if (widget.textNavigationColor != null) textNavigationColor = widget.textNavigationColor!;
+    if (widget.selectedColor != null) selectedColor = widget.selectedColor!;
+    if (widget.logoutNav != null) logOutPage = widget.logoutNav!..isLogout = true;
+    if (widget.floatWidth != null) floatMenuWidth = widget.floatWidth!;
+
+    widget.pages.asMap().entries.forEach((menu) {
+      menu.value..isLogout = false;
+      menu.value..menuIndex = menu.key.toDouble();
+      menu.value.subMenus?.asMap().entries.forEach((subMenu) {
+        subMenu.value..menuIndex = subMenu.key.toDouble();
+      });
+    });
+
+    currentPage = widget.pages.firstWhere(
+      (element) => element.key == widget.initialPageKey,
+      orElse: () => widget.pages[0],
+    );
+
+    initialPage = currentPage;
+
+    globalPages = widget.pages;
+  }
+
+  void _checkLogOutButton() {
+    if (mounted && widget.logoutNav != null && globalPages?.indexWhere((element) => element!.isLogout) == -1) {
+      logOutOnScroll = MediaQuery.of(context).size.height < widget.pages.length * 64;
+      if (logOutOnScroll) globalPages?.add(widget.logoutNav);
+    }
   }
 }
 
@@ -150,21 +168,37 @@ class ActionMenu {
   }
 
   static getPage() {
-    return currentPageIndex;
+    return currentPage;
   }
 
-  static void goTo(double pageIndex) {
-    double subPageIndex = pageIndex % 1;
-    if (pageIndex % 1 != 0) {
-      currentPageWidget = globalPages![pageIndex.round()].subMenus![((subPageIndex * 10).round() - 1)].page;
-      currentPageIndex = double.parse("${pageIndex.round()}.${((subPageIndex * 10).round() - 1)}");
+  static void goTo(String pageKey) {
+    NavMenu? toPage;
+
+    toPage = globalPages?.firstWhere(
+      (page) => page?.key == pageKey && !page!.isLogout,
+      orElse: () {
+        for (NavMenu? mainPage in globalPages ?? []) {
+          if (mainPage!.subMenus != null && mainPage.subMenus!.isNotEmpty) {
+            for (SubMenu element in mainPage.subMenus!) {
+              if (element.key == pageKey) {
+                toPage = NavMenu.copy(mainPage)..activeSubMenu = element;
+                break;
+              }
+            }
+          }
+          if (toPage != null) break;
+        }
+
+        return toPage;
+      },
+    );
+
+    if (toPage != null) {
+      currentPage = toPage!;
       controllerInnerStream.add(true);
       animationController.add(true);
     } else {
-      currentPageWidget = globalPages![pageIndex.round()].page;
-      currentPageIndex = pageIndex;
-      controllerInnerStream.add(true);
-      animationController.add(true);
+      print("Page Id Not Found");
     }
   }
 }

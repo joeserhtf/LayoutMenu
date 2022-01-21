@@ -11,15 +11,23 @@ bool isLargeScreen(BuildContext context) => MediaQuery.of(context).size.width > 
 
 bool activeMenu = false;
 bool activeSubMenu = false;
+
 double subMenuIndex = -1;
+
 int animationTime = 300;
 
-double maxWithBar = 300;
-double minWithBar = 65;
+double maxWidthBar = 300;
+double minWidthBar = 65;
+double floatMenuWidth = 185;
 
-double currentPageIndex = 0;
-Widget currentPageWidget = Container();
-List<NavMenu>? globalPages;
+String? initialPageKey;
+
+NavMenu currentPage = NavMenu(title: '', icon: Icon(Icons.circle), page: Container());
+NavMenu initialPage = NavMenu(title: '', icon: Icon(Icons.circle), page: Container());
+
+List<NavMenu?>? globalPages;
+NavMenu? logOutPage;
+bool logOutOnScroll = false;
 
 Color appBarColor = Colors.blue[700]!.withOpacity(0.9);
 Color headerColor = Colors.blue[600]!.withOpacity(0.8);

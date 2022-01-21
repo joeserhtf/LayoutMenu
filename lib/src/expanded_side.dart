@@ -14,69 +14,93 @@ class ExpandedSide extends StatefulWidget {
 
 class _ExpandedSideState extends State<ExpandedSide> {
   List<NavMenu> get menus => widget.menus;
-  int selectedIndex = -1;
+  int selectedIndex = currentPage.menuIndex.toInt();
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: maxWithBar,
+      width: maxWidthBar,
       color: navigationColor,
-      child: ListView.builder(
-        itemCount: menus.length,
-        itemBuilder: (BuildContext context, int index) {
-          NavMenu menu = menus[index]..menuIndex = index.toDouble();
-          bool selected = selectedIndex == index;
-          if (menu.subMenus == null) {
-            return ListTile(
-              onTap: () {
-                currentPageIndex = index.toDouble();
-                currentPageWidget = menu.page;
-                controllerInnerStream.add(true);
-                animationController.add(true);
-                activeMenu = false;
-
-                if (menu.function != null) {
-                  menu.function!();
-                }
-              },
-              leading: menu.icon,
-              title: Text(
-                menu.title,
-                style: TextStyle(
-                  color: textNavigationColor,
-                  fontWeight: FontWeight.w600,
-                ),
-              ),
-            );
-          }
-          return ExpansionTile(
-            onExpansionChanged: (z) {
-              setState(() {
-                selectedIndex = z ? index : -1;
-              });
+      child: Stack(
+        children: [
+          ListView.builder(
+            itemCount: menus.length,
+            itemBuilder: (BuildContext context, int index) {
+              NavMenu menu = menus[index];
+              if (menu.subMenus == null) {
+                return _tileNavPage(menu);
+              }
+              return _expansionNavPage(menu);
             },
-            leading: menu.icon,
-            initiallyExpanded: currentPageIndex.toInt() == menu.menuIndex.toInt(),
-            title: Text(
-              menu.title,
-              style: TextStyle(
-                color: textNavigationColor,
-                fontSize: mediaQuery(context, 0.015).clamp(14, 17),
-                fontWeight: FontWeight.w600,
-              ),
-            ),
-            trailing: Icon(
-              selected ? Icons.keyboard_arrow_up : Icons.keyboard_arrow_down,
-              color: selected ? Colors.white : Colors.white70,
-            ),
-            children: menu.subMenus!.asMap().entries.map((e) {
-              return _subMenuButton(
-                e.value..menuIndex = e.key.toDouble(),
-              );
-            }).toList(),
-          );
-        },
+          ),
+          if (logOutPage != null && !logOutOnScroll) ...{
+            Positioned(width: maxWidthBar, bottom: 0, child: _tileNavPage(logOutPage!))
+          },
+        ],
       ),
+    );
+  }
+
+  _tileNavPage(NavMenu menu) {
+    return ListTile(
+      onTap: () {
+        if (menu.isLogout) {
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(
+              builder: (context) => menu.page,
+            ),
+          );
+          currentPage = initialPage;
+          activeSubMenu = false;
+          activeMenu = false;
+        } else {
+          currentPage = menu;
+          controllerInnerStream.add(true);
+          animationController.add(true);
+          activeMenu = false;
+
+          if (menu.function != null) {
+            menu.function!();
+          }
+        }
+      },
+      leading: menu.icon,
+      title: Text(
+        menu.title,
+        style: TextStyle(
+          color: textNavigationColor,
+          fontWeight: FontWeight.w600,
+        ),
+      ),
+    );
+  }
+
+  _expansionNavPage(NavMenu menu) {
+    bool selected = selectedIndex == menu.menuIndex;
+    return ExpansionTile(
+      onExpansionChanged: (z) {
+        setState(() {
+          selectedIndex = z ? menu.menuIndex.toInt() : -1;
+        });
+      },
+      leading: menu.icon,
+      initiallyExpanded: currentPage.menuIndex == menu.menuIndex,
+      title: Text(
+        menu.title,
+        style: TextStyle(
+          color: textNavigationColor,
+          fontSize: mediaQuery(context, 0.015).clamp(14, 17),
+          fontWeight: FontWeight.w600,
+        ),
+      ),
+      trailing: Icon(
+        selected ? Icons.keyboard_arrow_up : Icons.keyboard_arrow_down,
+        color: selected ? Colors.white : Colors.white70,
+      ),
+      children: menu.subMenus!.map((e) {
+        return _subMenuButton(e);
+      }).toList(),
     );
   }
 
@@ -85,10 +109,11 @@ class _ExpandedSideState extends State<ExpandedSide> {
       visualDensity: VisualDensity.compact,
       dense: true,
       onTap: () {
-        currentPageIndex = double.parse("${menus[selectedIndex].menuIndex}.${subMenu.menuIndex}");
         activeMenu = false;
         activeSubMenu = false;
-        currentPageWidget = subMenu.page;
+
+        currentPage = NavMenu.copy(menus[selectedIndex])..activeSubMenu = subMenu;
+
         controllerInnerStream.add(true);
         animationController.add(true);
 

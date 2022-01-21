@@ -18,6 +18,8 @@ class SmallSideBar extends StatefulWidget {
 }
 
 class _SmallSideBarState extends State<SmallSideBar> {
+  double mousePosition = 64;
+
   List<NavMenu> get menus => widget.menus;
   bool onSidebar = false;
 
@@ -28,7 +30,7 @@ class _SmallSideBarState extends State<SmallSideBar> {
       mainAxisSize: MainAxisSize.min,
       children: [
         Container(
-          width: minWithBar,
+          width: minWidthBar,
           height: size.height,
           decoration: BoxDecoration(
             color: navigationColor,
@@ -36,12 +38,28 @@ class _SmallSideBarState extends State<SmallSideBar> {
               bottomRight: widget.roundBorder ? Radius.circular(6) : Radius.zero,
             ),
           ),
-          child: ListView.builder(
-            itemCount: menus.length,
-            itemBuilder: (context, index) {
-              NavMenu menu = menus[index]..menuIndex = index.toDouble();
-              return menu.visible ? _simpleMenuIcon(menu) : Container();
-            },
+          child: Padding(
+            padding: const EdgeInsets.only(bottom: 6),
+            child: Stack(
+              children: [
+                ListView.builder(
+                  physics: const BouncingScrollPhysics(),
+                  itemCount: menus.length,
+                  itemBuilder: (context, index) => menus[index].visible
+                      ? menus[index].isLogout
+                          ? _simpleMenuIcon(logOutPage!)
+                          : _simpleMenuIcon(menus[index])
+                      : Container(),
+                ),
+                if (logOutPage != null && !logOutOnScroll) ...{
+                  Positioned(
+                    width: minWidthBar,
+                    bottom: 0,
+                    child: _simpleMenuIcon(logOutPage!),
+                  )
+                },
+              ],
+            ),
           ),
         ),
         if (activeSubMenu) ...{
@@ -57,15 +75,14 @@ class _SmallSideBarState extends State<SmallSideBar> {
               }
             },
             child: Container(
-              width: 135,
+              width: floatMenuWidth,
               height: size.height,
               child: Stack(
                 children: [
                   Positioned(
-                    top: subMenuIndex * 64,
-                    child: Container(
-                      child: _subList(menus[subMenuIndex.toInt()].subMenus),
-                    ),
+                    top: _positionCalc(size, true),
+                    bottom: _positionCalc(size, false),
+                    child: _subList(menus[subMenuIndex.toInt()].subMenus),
                   )
                 ],
               ),
@@ -76,63 +93,78 @@ class _SmallSideBarState extends State<SmallSideBar> {
     );
   }
 
-  _simpleMenuIcon(NavMenu menu) {
-    return Tooltip(
-      message: menu.title,
-      child: Container(
-        width: 5,
-        height: 60,
-        color: currentPageIndex.toInt() == menu.menuIndex ? selectedColor : navigationColor,
-        alignment: Alignment.centerRight,
-        child: Container(
-          width: 60,
-          height: 60,
-          color: navigationColor,
-          child: ListTile(
-            leading: ConstrainedBox(
-              constraints: BoxConstraints(
-                maxHeight: 24,
-                maxWidth: 24,
-              ),
-              child: Theme(
-                data: ThemeData(
-                  iconTheme: IconThemeData(
-                    color: textNavigationColor,
-                  ),
-                ),
-                child: menu.icon,
-              ),
-            ),
-            onTap: () {
-              if (menu.subMenus != null) {
-                activeSubMenu = !activeSubMenu;
-                subMenuIndex = menu.menuIndex;
-                animationController.add(true);
-              } else {
-                if (menu.isLogout) {
-                  currentPageWidget = menu.page;
-                  currentPageIndex = 0;
-                  activeSubMenu = false;
-                  onSidebar = false;
-                  Navigator.pushReplacement(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => menu.page,
-                    ),
-                  );
-                } else {
-                  activeSubMenu = false;
-                  currentPageIndex = menu.menuIndex;
-                  currentPageWidget = menu.page;
-                  controllerInnerStream.add(true);
-                  animationController.add(true);
-                }
+  _positionCalc(Size size, bool istTop) {
+    return ((mousePosition.round() * 60) -
+                kToolbarHeight +
+                (50 + (menus[subMenuIndex.toInt()].subMenus!.length * 50))) >
+            size.height
+        ? istTop
+            ? null
+            : 0
+        : istTop
+            ? ((mousePosition.round() * 60) - kToolbarHeight)
+            : null;
+  }
 
-                if (menu.function != null) {
-                  menu.function!();
+  _simpleMenuIcon(NavMenu menu) {
+    return MouseRegion(
+      onHover: (details) {
+        mousePosition = details.position.dy / 64;
+      },
+      child: Tooltip(
+        message: menu.title,
+        child: Container(
+          height: 60,
+          color: currentPage.menuIndex == menu.menuIndex ? selectedColor : navigationColor,
+          alignment: Alignment.centerRight,
+          child: Container(
+            width: 60,
+            height: 60,
+            color: navigationColor,
+            child: ListTile(
+              leading: ConstrainedBox(
+                constraints: BoxConstraints(
+                  maxHeight: 24,
+                  maxWidth: 24,
+                ),
+                child: Theme(
+                  data: ThemeData(
+                    iconTheme: IconThemeData(
+                      color: textNavigationColor,
+                    ),
+                  ),
+                  child: menu.icon,
+                ),
+              ),
+              onTap: () {
+                if (menu.subMenus != null) {
+                  activeSubMenu = !activeSubMenu;
+                  subMenuIndex = menu.menuIndex;
+                  animationController.add(true);
+                } else {
+                  if (menu.isLogout) {
+                    currentPage = initialPage;
+                    activeSubMenu = false;
+                    onSidebar = false;
+                    Navigator.pushReplacement(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => menu.page,
+                      ),
+                    );
+                  } else {
+                    activeSubMenu = false;
+                    currentPage = menu;
+                    controllerInnerStream.add(true);
+                    animationController.add(true);
+                  }
+
+                  if (menu.function != null) {
+                    menu.function!();
+                  }
                 }
-              }
-            },
+              },
+            ),
           ),
         ),
       ),
@@ -141,7 +173,7 @@ class _SmallSideBarState extends State<SmallSideBar> {
 
   _subList(List<SubMenu>? submenus) {
     return Container(
-      width: 135,
+      width: floatMenuWidth,
       decoration: BoxDecoration(
         color: navigationColor.withOpacity(0.7),
         borderRadius: BorderRadius.only(
@@ -164,17 +196,16 @@ class _SmallSideBarState extends State<SmallSideBar> {
             ),
           )
         ]..addAll(
-            submenus!.asMap().entries.map((e) {
-              SubMenu subMenu = e.value..menuIndex = e.key.toDouble();
+            submenus!.map((subMenu) {
               return ListTile(
                 visualDensity: VisualDensity.compact,
                 dense: true,
                 onTap: () {
                   activeSubMenu = false;
                   onSidebar = false;
-                  currentPageIndex = double.parse("${menus[subMenuIndex.toInt()].menuIndex}.${subMenu.menuIndex}");
 
-                  currentPageWidget = subMenu.page;
+                  currentPage = NavMenu.copy(menus[subMenuIndex.toInt()])..activeSubMenu = subMenu;
+
                   controllerInnerStream.add(true);
                   animationController.add(true);
 

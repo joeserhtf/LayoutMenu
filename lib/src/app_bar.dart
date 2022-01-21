@@ -38,8 +38,10 @@ class CustomAppBar extends StatelessWidget {
                       Padding(
                         padding: EdgeInsets.only(bottom: 4),
                         child: Text(
-                          _titleComposition(currentPageIndex),
-                          style: TextStyle(color: textAppBarColor),
+                          "${currentPage.activeSubMenu != null ? "${currentPage.title} - ${currentPage.activeSubMenu!.title}" : currentPage.title}",
+                          style: TextStyle(
+                            color: textAppBarColor,
+                          ),
                         ),
                       ),
                     ],
@@ -54,15 +56,5 @@ class CustomAppBar extends StatelessWidget {
         ),
       ),
     );
-  }
-
-  _titleComposition(double index) {
-    double subPageIndex = index % 1;
-    if (pages[index.toInt()].subMenus != null) {
-      return "${pages[index.toInt()].title} "
-          "- ${pages[index.toInt()].subMenus![((subPageIndex * 10).round())].title}";
-    } else {
-      return pages[index.round()].title;
-    }
   }
 }

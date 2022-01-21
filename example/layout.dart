@@ -13,9 +13,9 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.grey,
       ),
       home: LayoutMenu(
-        logoutPage: MyApp(),
         logo: Icon(Icons.pages),
         appName: 'LayoutMenu',
+        appVersion: '1.1.0',
         onHoverEnter: false,
         hasAppBar: false,
         pages: [
@@ -77,8 +77,52 @@ class MyApp extends StatelessWidget {
             ],
             function: () {},
           ),
+          NavMenu(
+            icon: Icon(
+              Icons.ac_unit,
+              color: Colors.white,
+            ),
+            visible: true,
+            title: 'Categories',
+            page: Scaffold(
+              backgroundColor: Colors.green,
+              body: Container(),
+            ),
+            subMenus: [
+              SubMenu(
+                title: 'Purple Main',
+                page: Scaffold(
+                  backgroundColor: Colors.purple,
+                  body: Container(),
+                ),
+              ),
+              SubMenu(
+                title: 'Red Main',
+                page: Scaffold(
+                  backgroundColor: Colors.red,
+                  body: Container(),
+                ),
+              ),
+              SubMenu(
+                title: 'Yellow Menu',
+                page: Scaffold(
+                  backgroundColor: Colors.yellowAccent,
+                  body: Container(),
+                ),
+              ),
+            ],
+            function: () {},
+          ),
         ],
-        appVersion: '1.1.0',
+        logoutNav: NavMenu(
+          icon: Icon(
+            Icons.exit_to_app,
+            color: Colors.white,
+          ),
+          visible: true,
+          title: 'Logout',
+          page: Container(),
+        ),
       ),
     );
   }

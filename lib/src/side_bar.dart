@@ -11,7 +11,6 @@ class SideBar extends StatefulWidget {
   String appName;
   String? version;
   List<NavMenu> pages;
-  Widget logoutPage;
   bool hasAppBar;
   bool onHoverEnter;
   bool onHoverExit;
@@ -21,7 +20,6 @@ class SideBar extends StatefulWidget {
     required this.appName,
     required this.pages,
     this.version,
-    required this.logoutPage,
     required this.hasAppBar,
     required this.onHoverEnter,
     required this.onHoverExit,
@@ -37,7 +35,7 @@ class _SideBarState extends State<SideBar> {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: !widget.hasAppBar ? const EdgeInsets.symmetric(vertical: 2) : EdgeInsets.zero,
+      padding: !widget.hasAppBar ? const EdgeInsets.symmetric(vertical: 1) : EdgeInsets.zero,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -47,7 +45,7 @@ class _SideBarState extends State<SideBar> {
               if (widget.hasAppBar) ...{
                 Expanded(
                     child: CustomAppBar(
-                  pages: widget.pages,
+                  pages: pages,
                   actionWidgets: [],
                 )),
               }
@@ -55,10 +53,10 @@ class _SideBarState extends State<SideBar> {
           ),
           ConstrainedBox(
             constraints: BoxConstraints(
-              maxWidth: maxWithBar,
-              minWidth: minWithBar,
-              minHeight: MediaQuery.of(context).size.height - (kToolbarHeight + (!widget.hasAppBar ? 4 : 0)),
-              maxHeight: (MediaQuery.of(context).size.height - (kToolbarHeight + (!widget.hasAppBar ? 4 : 0))),
+              maxWidth: maxWidthBar,
+              minWidth: minWidthBar,
+              minHeight: MediaQuery.of(context).size.height - (kToolbarHeight + (!widget.hasAppBar ? 2 : 0)),
+              maxHeight: (MediaQuery.of(context).size.height - (kToolbarHeight + (!widget.hasAppBar ? 2 : 0))),
             ),
             child: _menu(),
           ),
@@ -69,7 +67,7 @@ class _SideBarState extends State<SideBar> {
 
   _leadingSideBar() {
     return Container(
-      width: activeMenu ? maxWithBar : minWithBar,
+      width: activeMenu ? maxWidthBar : minWidthBar,
       child: Card(
         color: headerColor,
         margin: EdgeInsets.zero,
