@@ -12,6 +12,7 @@ class LayoutMenu extends StatefulWidget {
   final String appVersion;
   final Widget logo;
   final Widget? actionButton;
+  final Color? backgroundColor;
   final Color? appBarColor;
   final Color? navigationColor;
   final Color? headerColor;
@@ -32,6 +33,7 @@ class LayoutMenu extends StatefulWidget {
     required this.appName,
     required this.appVersion,
     required this.logo,
+    this.backgroundColor,
     this.initialPageKey,
     this.actionButton,
     this.appBarColor,
@@ -66,7 +68,7 @@ class _LayoutMenuState extends State<LayoutMenu> {
     return Scaffold(
       floatingActionButton: widget.actionButton,
       drawerScrimColor: Colors.transparent,
-      //backgroundColor: Colors.transparent,
+      backgroundColor: widget.backgroundColor ?? Colors.transparent,
       body: GestureDetector(
         onHorizontalDragEnd: widget.onDragExpand
             ? (mov) {

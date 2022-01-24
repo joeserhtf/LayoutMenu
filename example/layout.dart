@@ -18,6 +18,7 @@ class MyApp extends StatelessWidget {
         appVersion: '1.1.0',
         onHoverEnter: false,
         hasAppBar: false,
+        backgroundColor: Colors.pink,
         pages: [
           NavPage(
             icon: Icon(
