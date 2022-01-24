@@ -14,6 +14,7 @@ class MyApp extends StatelessWidget {
       ),
       home: LayoutMenu(
         logo: Icon(Icons.pages),
+        initialPageKey: "purple",
         appName: 'LayoutMenu',
         appVersion: '1.1.0',
         onHoverEnter: false,
@@ -49,12 +50,14 @@ class MyApp extends StatelessWidget {
             ),
             visible: true,
             title: 'Categories',
+            key: "cat",
             page: Scaffold(
               backgroundColor: Colors.green,
               body: Container(),
             ),
             subMenus: [
               SubPage(
+                key: "purple",
                 title: 'Purple Main',
                 page: Scaffold(
                   backgroundColor: Colors.purple,

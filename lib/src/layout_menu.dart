@@ -137,18 +137,23 @@ class _LayoutMenuState extends State<LayoutMenu> {
     if (widget.logoutNav != null) logOutPage = widget.logoutNav!..isLogout = true;
     if (widget.floatWidth != null) floatMenuWidth = widget.floatWidth!;
 
+    NavPage? hasInitialPage;
+
     widget.pages.asMap().entries.forEach((menu) {
       menu.value..isLogout = false;
       menu.value..menuIndex = menu.key.toDouble();
+      if (menu.value.key == widget.initialPageKey) {
+        hasInitialPage = menu.value;
+      }
       menu.value.subMenus?.asMap().entries.forEach((subMenu) {
         subMenu.value..menuIndex = subMenu.key.toDouble();
+        if (subMenu.value.key == widget.initialPageKey) {
+          hasInitialPage = NavPage.copy(menu.value)..activeSubMenu = subMenu.value;
+        }
       });
     });
 
-    currentPage = widget.pages.firstWhere(
-      (element) => element.key == widget.initialPageKey,
-      orElse: () => widget.pages[0],
-    );
+    currentPage = hasInitialPage ?? widget.pages[0];
 
     initialPage = currentPage;
 
