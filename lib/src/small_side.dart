@@ -23,6 +23,14 @@ class _SmallSideBarState extends State<SmallSideBar> {
   List<NavPage> get menus => widget.menus;
   bool onSidebar = false;
 
+  late ScrollController _scrollControllerSideBar;
+
+  @override
+  void initState() {
+    super.initState();
+    _scrollControllerSideBar = ScrollController();
+  }
+
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
@@ -45,6 +53,7 @@ class _SmallSideBarState extends State<SmallSideBar> {
                 ListView.builder(
                   physics: const BouncingScrollPhysics(),
                   itemCount: menus.length,
+                  controller: _scrollControllerSideBar,
                   itemBuilder: (context, index) => menus[index].visible
                       ? menus[index].isLogout
                           ? _simpleMenuIcon(logOutPage!)
