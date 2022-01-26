@@ -98,6 +98,7 @@ class _LayoutMenuState extends State<LayoutMenu> {
               if (snapshot.data == false) {
                 return Container();
               }
+
               return currentPage.activeSubMenu?.page ?? currentPage.page;
             },
           ),

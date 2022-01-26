@@ -26,7 +26,20 @@ class MyApp extends StatelessWidget {
             ),
             visible: true,
             title: 'Menu 1',
-            page: Container(),
+            page: Container(
+              height: 3000,
+              width: 1200,
+              color: Colors.amberAccent,
+              child: SingleChildScrollView(
+                child: Column(
+                  children: List.generate(
+                      80,
+                      (index) => ListTile(
+                            title: Text("Big List $index"),
+                          )),
+                ),
+              ),
+            ),
           ),
           NavPage(
             icon: Icon(
@@ -39,6 +52,42 @@ class MyApp extends StatelessWidget {
               backgroundColor: Colors.grey,
               body: Container(),
             ),
+            function: () {},
+          ),
+          NavPage(
+            icon: Icon(
+              Icons.ac_unit,
+              color: Colors.white,
+            ),
+            visible: true,
+            title: 'Categories',
+            page: Scaffold(
+              backgroundColor: Colors.green,
+              body: Container(),
+            ),
+            subMenus: [
+              SubPage(
+                title: 'Purple Main',
+                page: Scaffold(
+                  backgroundColor: Colors.purple,
+                  body: Container(),
+                ),
+              ),
+              SubPage(
+                title: 'Red Main',
+                page: Scaffold(
+                  backgroundColor: Colors.red,
+                  body: Container(),
+                ),
+              ),
+              SubPage(
+                title: 'Yellow Menu',
+                page: Scaffold(
+                  backgroundColor: Colors.yellowAccent,
+                  body: Container(),
+                ),
+              ),
+            ],
             function: () {},
           ),
           NavPage(
