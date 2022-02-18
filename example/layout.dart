@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:layoutmenu/layout.dart';
 
+import 'logout.dart';
+
 void main() => runApp(MyApp());
 
 class MyApp extends StatelessWidget {
@@ -174,7 +176,7 @@ class MyApp extends StatelessWidget {
           ),
           visible: true,
           title: 'Logout',
-          page: Container(),
+          page: Logout(),
         ),
       ),
     );

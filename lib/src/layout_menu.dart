@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 
 import 'global.dart';
@@ -60,6 +62,7 @@ class _LayoutMenuState extends State<LayoutMenu> {
   void initState() {
     super.initState();
     _checkAndConfig();
+    controllerInnerStream =  StreamController();
   }
 
   @override
