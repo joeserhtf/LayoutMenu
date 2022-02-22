@@ -53,8 +53,15 @@ class MyApp extends StatelessWidget {
             visible: true,
             title: 'DashBoard',
             page: Scaffold(
-              backgroundColor: Colors.grey,
-              body: Container(),
+              backgroundColor: Colors.white,
+              body: Container(
+                child: TextButton(
+                  child: Text("sususus"),
+                  onPressed: (){
+                    ActionMenu.goTo("purple");
+                  },
+                ),
+              ),
             ),
             function: () {},
           ),

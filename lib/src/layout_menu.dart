@@ -62,7 +62,7 @@ class _LayoutMenuState extends State<LayoutMenu> {
   void initState() {
     super.initState();
     _checkAndConfig();
-    controllerInnerStream =  StreamController();
+    controllerInnerStream = StreamController();
   }
 
   @override
@@ -186,27 +186,29 @@ class ActionMenu {
   static void goTo(String pageKey) {
     NavPage? toPage;
 
-    toPage = globalPages?.firstWhere(
-      (page) => page?.key == pageKey && !page!.isLogout,
-      orElse: () {
-        for (NavPage? mainPage in globalPages ?? []) {
-          if (mainPage!.subMenus != null && mainPage.subMenus!.isNotEmpty) {
-            for (SubPage element in mainPage.subMenus!) {
-              if (element.key == pageKey) {
-                toPage = NavPage.copy(mainPage)..activeSubMenu = element;
-                break;
-              }
+    for (NavPage? page in globalPages ?? []) {
+      if (page?.key == pageKey && !page!.isLogout) {
+        toPage = NavPage.copy(page);
+        break;
+      }
+    }
+
+    if (toPage == null) {
+      for (NavPage? mainPage in globalPages ?? []) {
+        if (mainPage!.subMenus != null && mainPage.subMenus!.isNotEmpty) {
+          for (SubPage element in mainPage.subMenus!) {
+            if (element.key == pageKey) {
+              toPage = NavPage.copy(mainPage)..activeSubMenu = element;
+              break;
             }
           }
-          if (toPage != null) break;
         }
-
-        return toPage;
-      },
-    );
+        if (toPage != null) break;
+      }
+    }
 
     if (toPage != null) {
-      currentPage = toPage!;
+      currentPage = toPage;
       controllerInnerStream.add(true);
       animationController.add(true);
     } else {
