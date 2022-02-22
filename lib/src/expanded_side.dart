@@ -27,10 +27,14 @@ class _ExpandedSideState extends State<ExpandedSide> {
             itemCount: menus.length,
             itemBuilder: (BuildContext context, int index) {
               NavPage menu = menus[index];
-              if (menu.subMenus == null) {
-                return _tileNavPage(menu);
+              if (menu.visible) {
+                if (menu.subMenus == null) {
+                  return _tileNavPage(menu);
+                }
+                return _expansionNavPage(menu);
+              } else {
+                return Container();
               }
-              return _expansionNavPage(menu);
             },
           ),
           if (logOutPage != null && !logOutOnScroll) ...{

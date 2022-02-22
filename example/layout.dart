@@ -20,7 +20,7 @@ class MyApp extends StatelessWidget {
         appName: 'LayoutMenu',
         appVersion: '1.1.0',
         onHoverEnter: false,
-        hasAppBar: false,
+        hasAppBar: true,
         backgroundColor: Colors.pink,
         pages: [
           NavPage(
@@ -57,7 +57,7 @@ class MyApp extends StatelessWidget {
               body: Container(
                 child: TextButton(
                   child: Text("sususus"),
-                  onPressed: (){
+                  onPressed: () {
                     ActionMenu.goTo("purple");
                   },
                 ),
@@ -175,6 +175,19 @@ class MyApp extends StatelessWidget {
             ],
             function: () {},
           ),
+          NavPage(
+            icon: Icon(
+              Icons.ac_unit,
+              color: Colors.white,
+            ),
+            visible: false,
+            title: 'Invisible',
+            page: Scaffold(
+              backgroundColor: Colors.green,
+              body: Container(),
+            ),
+            function: () {},
+          )
         ],
         logoutNav: NavPage(
           icon: Icon(
