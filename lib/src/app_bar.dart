@@ -50,8 +50,10 @@ class CustomAppBar extends StatelessWidget {
                 );
               },
             ),
-            Row(
-              children: actionWidgets ?? [],
+            Expanded(
+              child: Row(
+                children: actionWidgets ?? [],
+              ),
             )
           ],
         ),
