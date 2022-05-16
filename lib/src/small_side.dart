@@ -1,16 +1,21 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
+import 'package:layoutmenu/src/current_page.dart';
 import 'package:layoutmenu/src/global.dart';
 import 'package:layoutmenu/src/nav_page.dart';
+import 'package:layoutmenu/src/utils/accents_remover.dart';
 import 'package:layoutmenu/src/utils/media_query.dart';
 
 class SmallSideBar extends StatefulWidget {
   final List<NavPage> menus;
   final bool roundBorder;
+  final CurrentPage currentPage;
 
   const SmallSideBar({
     Key? key,
     required this.menus,
     this.roundBorder = false,
+    required this.currentPage,
   }) : super(key: key);
 
   @override
@@ -116,6 +121,8 @@ class _SmallSideBarState extends State<SmallSideBar> {
   }
 
   _simpleMenuIcon(NavPage menu) {
+    bool isSel = widget.currentPage.index == menu.menuIndex ||
+        (widget.currentPage.index >= menu.menuIndex && widget.currentPage.index < menu.menuIndex + 1);
     return MouseRegion(
       onHover: (details) {
         mousePosition = details.position.dy / 64;
@@ -124,7 +131,7 @@ class _SmallSideBarState extends State<SmallSideBar> {
         message: menu.title,
         child: Container(
           height: 60,
-          color: currentPage.menuIndex == menu.menuIndex ? selectedColor : navigationColor,
+          color: isSel ? selectedColor : navigationColor,
           alignment: Alignment.centerRight,
           child: Container(
             width: 60,
@@ -152,19 +159,12 @@ class _SmallSideBarState extends State<SmallSideBar> {
                   animationController.add(true);
                 } else {
                   if (menu.isLogout) {
-                    currentPage = initialPage;
                     activeSubMenu = false;
                     onSidebar = false;
-                    Navigator.pushReplacement(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => menu.page,
-                      ),
-                    );
+                    context.go("/login");
                   } else {
+                    context.go("/${menu.path.toString()}".withoutDiacriticalMarks.replaceAll(' ', '').toLowerCase());
                     activeSubMenu = false;
-                    currentPage = menu;
-                    controllerInnerStream.add(true);
                     animationController.add(true);
                   }
 
@@ -213,9 +213,14 @@ class _SmallSideBarState extends State<SmallSideBar> {
                   activeSubMenu = false;
                   onSidebar = false;
 
-                  currentPage = NavPage.copy(menus[subMenuIndex.toInt()])..activeSubMenu = subMenu;
+                  context.go(
+                    "/${menus[subMenuIndex.toInt()].path ?? menus[subMenuIndex.toInt()].title}"
+                            "/${subMenu.path ?? subMenu.title}"
+                        .withoutDiacriticalMarks
+                        .replaceAll(' ', '')
+                        .toLowerCase(),
+                  );
 
-                  controllerInnerStream.add(true);
                   animationController.add(true);
 
                   if (subMenu.function != null) {

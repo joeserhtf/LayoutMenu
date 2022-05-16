@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:layoutmenu/src/global.dart';
 import 'package:layoutmenu/src/nav_page.dart';
+import 'package:layoutmenu/src/utils/accents_remover.dart';
 import 'package:layoutmenu/src/utils/media_query.dart';
 
 class ExpandedSide extends StatefulWidget {
@@ -14,7 +16,7 @@ class ExpandedSide extends StatefulWidget {
 
 class _ExpandedSideState extends State<ExpandedSide> {
   List<NavPage> get menus => widget.menus;
-  int selectedIndex = currentPage.menuIndex.toInt();
+  int selectedIndex = 1; //TODO currentPage.menuIndex.toInt();
 
   @override
   Widget build(BuildContext context) {
@@ -49,20 +51,15 @@ class _ExpandedSideState extends State<ExpandedSide> {
     return ListTile(
       onTap: () {
         if (menu.isLogout) {
-          Navigator.pushReplacement(
-            context,
-            MaterialPageRoute(
-              builder: (context) => menu.page,
-            ),
-          );
-          currentPage = initialPage;
           activeSubMenu = false;
           activeMenu = false;
+          context.go("/login");
         } else {
-          currentPage = menu;
-          controllerInnerStream.add(true);
           animationController.add(true);
           activeMenu = false;
+          context.go(
+            "/${menu.path.toString()}".withoutDiacriticalMarks.replaceAll(' ', '').toLowerCase(),
+          );
 
           if (menu.function != null) {
             menu.function!();
@@ -89,7 +86,7 @@ class _ExpandedSideState extends State<ExpandedSide> {
         });
       },
       leading: menu.icon,
-      initiallyExpanded: currentPage.menuIndex == menu.menuIndex,
+      initiallyExpanded: false, //TODO currentPage.menuIndex == menu.menuIndex,
       title: Text(
         menu.title,
         style: TextStyle(
@@ -103,12 +100,12 @@ class _ExpandedSideState extends State<ExpandedSide> {
         color: selected ? Colors.white : Colors.white70,
       ),
       children: menu.subMenus!.map((e) {
-        return _subMenuButton(e);
+        return _subMenuButton(e, menu);
       }).toList(),
     );
   }
 
-  Widget _subMenuButton(SubPage subMenu) {
+  Widget _subMenuButton(SubPage subMenu, NavPage menu) {
     return ListTile(
       visualDensity: VisualDensity.compact,
       dense: true,
@@ -116,9 +113,13 @@ class _ExpandedSideState extends State<ExpandedSide> {
         activeMenu = false;
         activeSubMenu = false;
 
-        currentPage = NavPage.copy(menus[selectedIndex])..activeSubMenu = subMenu;
+        context.go(
+          "/${menu.path ?? menu.title}/${subMenu.path ?? subMenu.title}"
+              .withoutDiacriticalMarks
+              .replaceAll(' ', '')
+              .toLowerCase(),
+        );
 
-        controllerInnerStream.add(true);
         animationController.add(true);
 
         if (subMenu.function != null) {

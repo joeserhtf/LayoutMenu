@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class NavPage {
-  String? key;
+  String? path;
   Widget icon;
   bool visible;
   String title;
@@ -17,14 +17,14 @@ class NavPage {
     required this.icon,
     required this.title,
     required this.page,
-    this.key,
+    this.path,
     this.visible = true,
     this.subMenus,
     this.function,
   });
 
   NavPage.copy(NavPage pageOrigin)
-      : key = pageOrigin.key,
+      : path = pageOrigin.path,
         icon = pageOrigin.icon,
         visible = pageOrigin.visible,
         title = pageOrigin.title,
@@ -35,7 +35,7 @@ class NavPage {
 }
 
 class SubPage {
-  String? key;
+  String? path;
   String title;
   Widget page;
   Function? function;
@@ -45,6 +45,6 @@ class SubPage {
     required this.title,
     required this.page,
     this.function,
-    this.key,
+    this.path,
   });
 }

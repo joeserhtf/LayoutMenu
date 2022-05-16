@@ -24,7 +24,7 @@ class _LogoutState extends State<Logout> {
                 ),
               );
             },
-            child: Text("aa"),
+            child: Text("Enter"),
           ),
         ),
       ),

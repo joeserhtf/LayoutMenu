@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:layoutmenu/layout.dart';
 import 'package:layoutmenu/src/app_bar.dart';
+import 'package:layoutmenu/src/current_page.dart';
 import 'package:layoutmenu/src/expanded_side.dart';
 import 'package:layoutmenu/src/global.dart';
+import 'package:layoutmenu/src/nav_page.dart';
 import 'package:layoutmenu/src/small_side.dart';
 import 'package:layoutmenu/src/utils/media_query.dart';
+
 
 class SideBar extends StatefulWidget {
   final Widget logo;
@@ -15,6 +17,7 @@ class SideBar extends StatefulWidget {
   final bool onHoverEnter;
   final bool onHoverExit;
   final actionWidgets;
+  final CurrentPage currentPage;
 
   SideBar({
     required this.logo,
@@ -25,6 +28,7 @@ class SideBar extends StatefulWidget {
     required this.hasAppBar,
     required this.onHoverEnter,
     required this.onHoverExit,
+    required this.currentPage,
   });
 
   @override
@@ -49,6 +53,7 @@ class _SideBarState extends State<SideBar> {
                     child: CustomAppBar(
                   pages: pages,
                   actionWidgets: widget.actionWidgets ?? [],
+                  currentPage: widget.currentPage,
                 )),
               }
             ],
@@ -134,6 +139,7 @@ class _SideBarState extends State<SideBar> {
         child: SmallSideBar(
           menus: pages,
           roundBorder: !widget.hasAppBar,
+            currentPage: widget.currentPage,
         ),
       );
     }

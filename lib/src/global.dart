@@ -1,11 +1,9 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-
-import 'nav_page.dart';
+import 'package:layoutmenu/src/nav_page.dart';
 
 StreamController animationController = StreamController.broadcast();
-StreamController controllerInnerStream = StreamController();
 
 bool isLargeScreen(BuildContext context) => MediaQuery.of(context).size.width > 770;
 
@@ -22,10 +20,7 @@ double floatMenuWidth = 185;
 
 String? initialPageKey;
 
-NavPage currentPage = NavPage(title: '', icon: Icon(Icons.circle), page: Container());
-NavPage initialPage = NavPage(title: '', icon: Icon(Icons.circle), page: Container());
-
-List<NavPage?>? globalPages;
+List<NavPage>? globalPages;
 NavPage? logOutPage;
 bool logOutOnScroll = false;
 

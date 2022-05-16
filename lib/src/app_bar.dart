@@ -1,13 +1,20 @@
 import 'package:flutter/material.dart';
-import 'package:layoutmenu/layout.dart';
+import 'package:layoutmenu/src/nav_page.dart';
 
+import 'current_page.dart';
 import 'global.dart';
 
 class CustomAppBar extends StatelessWidget {
   final List<Widget>? actionWidgets;
-  final List<NavPage> pages;
+  final List<NavPage?> pages;
+  final CurrentPage currentPage;
 
-  CustomAppBar({Key? key, this.actionWidgets, required this.pages}) : super(key: key);
+  CustomAppBar({
+    Key? key,
+    this.actionWidgets,
+    required this.pages,
+    required this.currentPage,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -39,7 +46,7 @@ class CustomAppBar extends StatelessWidget {
                       Padding(
                         padding: EdgeInsets.only(bottom: 4),
                         child: Text(
-                          "${currentPage.activeSubMenu != null ? "${currentPage.title} - ${currentPage.activeSubMenu!.title}" : currentPage.title}",
+                          currentPage.title,
                           style: TextStyle(
                             color: textAppBarColor,
                           ),
