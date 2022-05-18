@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:layoutmenu/src/current_page.dart';
 import 'package:layoutmenu/src/global.dart';
 import 'package:layoutmenu/src/nav_page.dart';
 import 'package:layoutmenu/src/utils/accents_remover.dart';
@@ -9,13 +8,11 @@ import 'package:layoutmenu/src/utils/media_query.dart';
 class SmallSideBar extends StatefulWidget {
   final List<NavPage> menus;
   final bool roundBorder;
-  final CurrentPage currentPage;
 
   const SmallSideBar({
     Key? key,
     required this.menus,
     this.roundBorder = false,
-    required this.currentPage,
   }) : super(key: key);
 
   @override
@@ -121,62 +118,64 @@ class _SmallSideBarState extends State<SmallSideBar> {
   }
 
   _simpleMenuIcon(NavPage menu) {
-    bool isSel = widget.currentPage.index == menu.menuIndex ||
-        (widget.currentPage.index >= menu.menuIndex && widget.currentPage.index < menu.menuIndex + 1);
+    bool isSel = globalRouter.location
+        .contains("/${menu.path ?? menu.title}".withoutDiacriticalMarks.replaceAll(' ', '').toLowerCase());
     return MouseRegion(
       onHover: (details) {
         mousePosition = details.position.dy / 64;
       },
-      child: Tooltip(
-        message: menu.title,
+      child: Container(
+        height: 60,
+        color: isSel ? selectedColor : navigationColor,
+        alignment: Alignment.centerRight,
         child: Container(
+          width: 60,
           height: 60,
-          color: isSel ? selectedColor : navigationColor,
-          alignment: Alignment.centerRight,
-          child: Container(
-            width: 60,
-            height: 60,
-            color: navigationColor,
-            child: ListTile(
-              leading: ConstrainedBox(
-                constraints: BoxConstraints(
-                  maxHeight: 24,
-                  maxWidth: 24,
-                ),
-                child: Theme(
-                  data: ThemeData(
-                    iconTheme: IconThemeData(
-                      color: textNavigationColor,
-                    ),
-                  ),
-                  child: menu.icon,
-                ),
+          color: navigationColor,
+          child: ListTile(
+            leading: ConstrainedBox(
+              constraints: BoxConstraints(
+                maxHeight: 24,
+                maxWidth: 24,
               ),
-              onTap: () {
-                if (menu.subMenus != null) {
-                  activeSubMenu = !activeSubMenu;
-                  subMenuIndex = menu.menuIndex;
-                  animationController.add(true);
-                } else {
-                  if (menu.isLogout) {
-                    activeSubMenu = false;
-                    onSidebar = false;
-                    context.go("/login");
-                  } else {
-                    context.go("/${menu.path.toString()}".withoutDiacriticalMarks.replaceAll(' ', '').toLowerCase());
-                    activeSubMenu = false;
-                    animationController.add(true);
-                  }
-
-                  if (menu.function != null) {
-                    menu.function!();
-                  }
-                }
-              },
+              child: Theme(
+                data: ThemeData(
+                  iconTheme: IconThemeData(
+                    color: textNavigationColor,
+                  ),
+                ),
+                child: menu.icon,
+              ),
             ),
+            onTap: () {
+              if (menu.subMenus != null) {
+                activeSubMenu = !activeSubMenu;
+                subMenuIndex = menu.menuIndex;
+                animationController.add(true);
+              } else {
+                if (menu.isLogout) {
+                  activeSubMenu = false;
+                  onSidebar = false;
+                  isAuthenticated = false;
+                  context.go("/login");
+                } else {
+                  context.go("/${menu.path.toString()}".withoutDiacriticalMarks.replaceAll(' ', '').toLowerCase());
+                  activeSubMenu = false;
+                  animationController.add(true);
+                }
+
+                if (menu.function != null) {
+                  menu.function!();
+                }
+              }
+            },
           ),
         ),
-      ),
+      ) /*Tooltip(
+        message: menu.title,
+        child: ,
+      )*/
+      ,
     );
   }
 

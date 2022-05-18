@@ -53,6 +53,7 @@ class _ExpandedSideState extends State<ExpandedSide> {
         if (menu.isLogout) {
           activeSubMenu = false;
           activeMenu = false;
+          isAuthenticated = false;
           context.go("/login");
         } else {
           animationController.add(true);
@@ -78,7 +79,9 @@ class _ExpandedSideState extends State<ExpandedSide> {
   }
 
   _expansionNavPage(NavPage menu) {
-    bool selected = selectedIndex == menu.menuIndex;
+    bool selected = globalRouter.location
+        .contains("/${menu.path ?? menu.title}".withoutDiacriticalMarks.replaceAll(' ', '').toLowerCase());
+    ;
     return ExpansionTile(
       onExpansionChanged: (z) {
         setState(() {

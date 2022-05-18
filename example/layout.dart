@@ -1,28 +1,23 @@
 import 'package:flutter/material.dart';
 import 'package:layoutmenu/layout.dart';
 
-import 'logout.dart';
-
 void main() => runApp(MyApp());
 
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return _menu();
-  }
-
-  _menu() {
     return LayoutMenu(
       logo: Icon(Icons.pages),
       initialPageKey: "purple",
       appName: 'LayoutMenu',
-      appVersion: '1.1.0',
+      appVersion: '2.0.0',
       onHoverEnter: false,
       hasAppBar: true,
+      needsAuth: true,
       backgroundColor: Colors.pink,
       pages: [
         NavPage(
-          path: "router1",
+          path: "routera",
           icon: Icon(
             Icons.ac_unit,
             color: Colors.white,
@@ -44,7 +39,7 @@ class MyApp extends StatelessWidget {
           ),
         ),
         NavPage(
-          path: "router2",
+          path: "Relatórios",
           icon: Icon(
             Icons.ac_unit,
             color: Colors.white,
@@ -66,187 +61,97 @@ class MyApp extends StatelessWidget {
           ),
         ),
         NavPage(
-          path: "router3",
+          path: "routerc",
           icon: Icon(
             Icons.ac_unit,
             color: Colors.white,
           ),
           visible: true,
           title: 'Menu',
-          page: Test(),
+          page: Scaffold(
+            backgroundColor: Colors.cyan,
+            body: Container(),
+          ),
         ),
-        /*NavPage(
-            icon: Icon(
-              Icons.ac_unit,
-              color: Colors.white,
-            ),
-            visible: true,
-            title: 'DashBoard',
-            page: Scaffold(
-              backgroundColor: Colors.white,
-              body: Container(
-                child: TextButton(
-                  child: Text("sususus"),
-                  onPressed: () {
-                    ActionMenu.goTo("purple");
-                  },
-                ),
-              ),
-            ),
-            function: () {},
+        NavPage(
+          icon: Icon(
+            Icons.ac_unit,
+            color: Colors.white,
           ),
-          NavPage(
-            icon: Icon(
-              Icons.ac_unit,
-              color: Colors.white,
+          visible: true,
+          title: 'routerd',
+          page: Scaffold(
+            backgroundColor: Colors.white,
+            body: Container(
+              child: TextButton(
+                child: Text("sususus"),
+                onPressed: () {
+                  ActionMenu.goTo("purple");
+                },
+              ),
             ),
-            visible: true,
-            title: 'Categories',
-            key: "cat",
-            page: Scaffold(
-              backgroundColor: Colors.green,
-              body: Container(),
-            ),
-            subMenus: [
-              SubPage(
-                key: "purple",
-                title: 'Purple Main',
-                page: Scaffold(
-                  backgroundColor: Colors.purple,
-                  body: Container(),
-                ),
-              ),
-              SubPage(
-                title: 'Red Main',
-                page: Scaffold(
-                  backgroundColor: Colors.red,
-                  body: Container(),
-                ),
-              ),
-              SubPage(
-                title: 'Yellow Menu',
-                page: Scaffold(
-                  backgroundColor: Colors.yellowAccent,
-                  body: Container(),
-                ),
-              ),
-            ],
-            function: () {},
           ),
-          NavPage(
-            icon: Icon(
-              Icons.ac_unit,
-              color: Colors.white,
-            ),
-            visible: true,
-            title: 'Categories',
-            page: Scaffold(
-              backgroundColor: Colors.green,
-              body: Container(),
-            ),
-            subMenus: [
-              SubPage(
-                title: 'Purple Main',
-                page: Scaffold(
-                  backgroundColor: Colors.purple,
-                  body: Container(),
-                ),
+          function: () {},
+          subMenus: [
+            SubPage(
+              path: "purple",
+              title: 'Purple',
+              page: Scaffold(
+                backgroundColor: Colors.purple,
+                body: Container(),
               ),
-              SubPage(
-                title: 'Red Main',
-                page: Scaffold(
-                  backgroundColor: Colors.red,
-                  body: Container(),
-                ),
-              ),
-              SubPage(
-                title: 'Yellow Menu',
-                page: Scaffold(
-                  backgroundColor: Colors.yellowAccent,
-                  body: Container(),
-                ),
-              ),
-            ],
-            function: () {},
-          ),
-          NavPage(
-            icon: Icon(
-              Icons.ac_unit,
-              color: Colors.white,
             ),
-            visible: true,
-            title: 'Categories',
-            page: Scaffold(
-              backgroundColor: Colors.green,
-              body: Container(),
-            ),
-            subMenus: [
-              SubPage(
-                title: 'Purple Main',
-                page: Scaffold(
-                  backgroundColor: Colors.purple,
-                  body: Container(),
-                ),
+            SubPage(
+              path: "red",
+              title: 'Red Main',
+              page: Scaffold(
+                backgroundColor: Colors.red,
+                body: Container(),
               ),
-              SubPage(
-                title: 'Red Main',
-                page: Scaffold(
-                  backgroundColor: Colors.red,
-                  body: Container(),
-                ),
-              ),
-              SubPage(
-                title: 'Yellow Menu',
-                page: Scaffold(
-                  backgroundColor: Colors.yellowAccent,
-                  body: Container(),
-                ),
-              ),
-            ],
-            function: () {},
-          ),
-          NavPage(
-            icon: Icon(
-              Icons.ac_unit,
-              color: Colors.white,
             ),
-            visible: false,
-            title: 'Invisible',
-            page: Scaffold(
-              backgroundColor: Colors.green,
-              body: Container(),
+            SubPage(
+              path: "yellow",
+              title: 'Yellow Menu',
+              page: Scaffold(
+                backgroundColor: Colors.yellowAccent,
+                body: Container(),
+              ),
             ),
-            function: () {},
-          )*/
+          ],
+        ),
       ],
-      logoutNav: NavPage(
+      loginPage: NavPage(
         icon: Icon(
-          Icons.exit_to_app,
+          Icons.ac_unit,
           color: Colors.white,
         ),
-        visible: true,
-        title: 'Logout',
-        page: Logout(),
+        title: 'Login',
+        page: Login(),
       ),
     );
   }
 }
 
-class Test extends StatelessWidget {
-  const Test({Key? key}) : super(key: key);
+class Login extends StatefulWidget {
+  const Login({Key? key}) : super(key: key);
 
+  @override
+  _LoginState createState() => _LoginState();
+}
+
+class _LoginState extends State<Login> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Center(
-        child: ElevatedButton(
-          child: Text("adasd"),
-          onPressed: () {
-            Navigator.pushNamed(
-              context,
-              "/router2",
-            );
-          },
+      body: Container(
+        child: Center(
+          child: TextButton(
+            onPressed: () {
+              ActionMenu.setLogged();
+              ActionMenu.goTo('/routera');
+            },
+            child: Text("Enter"),
+          ),
         ),
       ),
     );

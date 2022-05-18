@@ -1,19 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:layoutmenu/src/nav_page.dart';
 
-import 'current_page.dart';
 import 'global.dart';
 
 class CustomAppBar extends StatelessWidget {
   final List<Widget>? actionWidgets;
   final List<NavPage?> pages;
-  final CurrentPage currentPage;
+  final String title;
 
   CustomAppBar({
     Key? key,
     this.actionWidgets,
     required this.pages,
-    required this.currentPage,
+    required this.title,
   }) : super(key: key);
 
   @override
@@ -46,7 +45,7 @@ class CustomAppBar extends StatelessWidget {
                       Padding(
                         padding: EdgeInsets.only(bottom: 4),
                         child: Text(
-                          currentPage.title,
+                          title,
                           style: TextStyle(
                             color: textAppBarColor,
                           ),

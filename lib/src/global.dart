@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:layoutmenu/src/nav_page.dart';
 
 StreamController animationController = StreamController.broadcast();
@@ -18,11 +19,14 @@ double maxWidthBar = 300;
 double minWidthBar = 65;
 double floatMenuWidth = 185;
 
+late GoRouter globalRouter;
+
 String? initialPageKey;
 
 List<NavPage>? globalPages;
 NavPage? logOutPage;
 bool logOutOnScroll = false;
+bool isAuthenticated = false;
 
 Color appBarColor = Colors.blue[700]!.withOpacity(0.9);
 Color headerColor = Colors.blue[600]!.withOpacity(0.8);

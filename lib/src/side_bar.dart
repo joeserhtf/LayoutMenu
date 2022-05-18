@@ -1,12 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:layoutmenu/src/app_bar.dart';
-import 'package:layoutmenu/src/current_page.dart';
 import 'package:layoutmenu/src/expanded_side.dart';
 import 'package:layoutmenu/src/global.dart';
 import 'package:layoutmenu/src/nav_page.dart';
 import 'package:layoutmenu/src/small_side.dart';
+import 'package:layoutmenu/src/utils/accents_remover.dart';
 import 'package:layoutmenu/src/utils/media_query.dart';
-
 
 class SideBar extends StatefulWidget {
   final Widget logo;
@@ -17,7 +16,7 @@ class SideBar extends StatefulWidget {
   final bool onHoverEnter;
   final bool onHoverExit;
   final actionWidgets;
-  final CurrentPage currentPage;
+  final Widget currentPage;
 
   SideBar({
     required this.logo,
@@ -40,6 +39,13 @@ class _SideBarState extends State<SideBar> {
 
   @override
   Widget build(BuildContext context) {
+    int titleIndex = pages.indexWhere((element) {
+      return (element.path ?? element.title)
+          .withoutDiacriticalMarks
+          .replaceAll(' ', '')
+          .toLowerCase()
+          .contains(globalRouter.location.split('/')[1]);
+    });
     return Padding(
       padding: !widget.hasAppBar ? const EdgeInsets.symmetric(vertical: 1) : EdgeInsets.zero,
       child: Column(
@@ -53,7 +59,7 @@ class _SideBarState extends State<SideBar> {
                     child: CustomAppBar(
                   pages: pages,
                   actionWidgets: widget.actionWidgets ?? [],
-                  currentPage: widget.currentPage,
+                  title: titleIndex != -1 ? pages[titleIndex].title : '',
                 )),
               }
             ],
@@ -139,7 +145,6 @@ class _SideBarState extends State<SideBar> {
         child: SmallSideBar(
           menus: pages,
           roundBorder: !widget.hasAppBar,
-            currentPage: widget.currentPage,
         ),
       );
     }
