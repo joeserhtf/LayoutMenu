@@ -24,14 +24,16 @@ class MyApp extends StatelessWidget {
           ),
           visible: true,
           title: 'Menu 1',
-          page: Container(
-            color: Colors.amberAccent,
-            child: SingleChildScrollView(
-              child: Column(
-                children: List.generate(
-                  4,
-                  (index) => ListTile(
-                    title: Text("Big List $index"),
+          page: Scaffold(
+            body: Container(
+              color: Colors.amberAccent,
+              child: SingleChildScrollView(
+                child: Column(
+                  children: List.generate(
+                    4,
+                    (index) => ListTile(
+                      title: Text("Big List $index"),
+                    ),
                   ),
                 ),
               ),
@@ -40,20 +42,19 @@ class MyApp extends StatelessWidget {
         ),
         NavPage(
           path: "Relatórios",
-          icon: Icon(
-            Icons.ac_unit,
-            color: Colors.white,
-          ),
+          icon: Icon(Icons.ac_unit, color: Colors.white),
           visible: true,
           title: 'Menu',
-          page: Container(
-            color: Colors.purple,
-            child: SingleChildScrollView(
-              child: Column(
-                children: List.generate(
-                  6,
-                  (index) => ListTile(
-                    title: Text("Big List $index"),
+          page: Scaffold(
+            body: Container(
+              color: Colors.purple,
+              child: SingleChildScrollView(
+                child: Column(
+                  children: List.generate(
+                    6,
+                    (index) => ListTile(
+                      title: Text("Big List $index"),
+                    ),
                   ),
                 ),
               ),

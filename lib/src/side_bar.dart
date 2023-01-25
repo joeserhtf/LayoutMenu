@@ -56,11 +56,12 @@ class _SideBarState extends State<SideBar> {
               _leadingSideBar(),
               if (widget.hasAppBar) ...{
                 Expanded(
-                    child: CustomAppBar(
-                  pages: pages,
-                  actionWidgets: widget.actionWidgets ?? [],
-                  title: titleIndex != -1 ? pages[titleIndex].title : '',
-                )),
+                  child: CustomAppBar(
+                    pages: pages,
+                    actionWidgets: widget.actionWidgets ?? [],
+                    title: titleIndex != -1 ? pages[titleIndex].title : '',
+                  ),
+                ),
               }
             ],
           ),
@@ -93,9 +94,7 @@ class _SideBarState extends State<SideBar> {
           height: kToolbarHeight,
           alignment: Alignment.center,
           child: !isLargeScreen(context) || activeMenu == false
-              ? Center(
-                  child: widget.logo,
-                )
+              ? Center(child: widget.logo)
               : Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [

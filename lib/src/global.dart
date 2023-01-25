@@ -20,6 +20,8 @@ double minWidthBar = 65;
 double floatMenuWidth = 185;
 
 late GoRouter globalRouter;
+final GlobalKey<NavigatorState> rootNavigatorKey = GlobalKey<NavigatorState>();
+final GlobalKey<NavigatorState> shellNavigatorKey = GlobalKey<NavigatorState>();
 
 String? initialPageKey;
 

@@ -44,9 +44,7 @@ class _SmallSideBarState extends State<SmallSideBar> {
           height: size.height,
           decoration: BoxDecoration(
             color: navigationColor,
-            borderRadius: BorderRadius.only(
-              bottomRight: widget.roundBorder ? Radius.circular(6) : Radius.zero,
-            ),
+            borderRadius: BorderRadius.only(bottomRight: widget.roundBorder ? Radius.circular(6) : Radius.zero),
           ),
           child: Padding(
             padding: const EdgeInsets.only(bottom: 6),
@@ -157,9 +155,10 @@ class _SmallSideBarState extends State<SmallSideBar> {
                   activeSubMenu = false;
                   onSidebar = false;
                   isAuthenticated = false;
-                  context.go("/login");
+                  context.push("/login");
                 } else {
-                  context.go("/${menu.path.toString()}".withoutDiacriticalMarks.replaceAll(' ', '').toLowerCase());
+                  final path = "/${menu.path.toString()}".withoutDiacriticalMarks.replaceAll(' ', '').toLowerCase();
+                  context.push(path);
                   activeSubMenu = false;
                   animationController.add(true);
                 }
@@ -212,7 +211,7 @@ class _SmallSideBarState extends State<SmallSideBar> {
                   activeSubMenu = false;
                   onSidebar = false;
 
-                  context.go(
+                  context.push(
                     "/${menus[subMenuIndex.toInt()].path ?? menus[subMenuIndex.toInt()].title}"
                             "/${subMenu.path ?? subMenu.title}"
                         .withoutDiacriticalMarks

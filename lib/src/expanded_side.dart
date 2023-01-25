@@ -54,11 +54,11 @@ class _ExpandedSideState extends State<ExpandedSide> {
           activeSubMenu = false;
           activeMenu = false;
           isAuthenticated = false;
-          context.go("/login");
+          context.push("/login");
         } else {
           animationController.add(true);
           activeMenu = false;
-          context.go(
+          context.push(
             "/${menu.path.toString()}".withoutDiacriticalMarks.replaceAll(' ', '').toLowerCase(),
           );
 
@@ -116,7 +116,7 @@ class _ExpandedSideState extends State<ExpandedSide> {
         activeMenu = false;
         activeSubMenu = false;
 
-        context.go(
+        context.push(
           "/${menu.path ?? menu.title}/${subMenu.path ?? subMenu.title}"
               .withoutDiacriticalMarks
               .replaceAll(' ', '')
