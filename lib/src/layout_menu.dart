@@ -329,11 +329,11 @@ class _LayoutBuilderState extends State<LayoutBuilder> {
 
 class ActionMenu {
   static void goTo(String path) {
-    globalRouter.routerDelegate.go(path);
+    globalRouter.go(path);
   }
 
   static String currentPath() {
-    return globalRouter.routerDelegate.location;
+    return globalRouter.location;
   }
 
   static void setLogged() {
