@@ -79,6 +79,33 @@ class _LayoutMenuState extends State<LayoutMenu> {
       routerDelegate: globalRouter.routerDelegate,
       theme: widget.themeData,
       title: widget.appName,
+      builder: (context, child) {
+        if (globalRouter.location == '/login' /*|| globalRouter.error != null*/) return child ?? Container();
+        return LayoutBuilder(
+          actionWidgets: widget.actionWidgets,
+          pages: widget.pages,
+          initialPageKey: widget.initialPageKey,
+          appName: widget.appName,
+          appVersion: widget.appVersion,
+          logo: widget.logo,
+          actionButton: widget.actionButton,
+          backgroundColor: widget.backgroundColor,
+          appBarColor: widget.appBarColor,
+          navigationColor: widget.navigationColor,
+          headerColor: widget.headerColor,
+          textAppBarColor: widget.textAppBarColor,
+          textNavigationColor: widget.textNavigationColor,
+          textHeaderColor: widget.textHeaderColor,
+          selectedColor: widget.selectedColor,
+          logoutNav: widget.loginPage,
+          onHoverEnter: widget.onHoverEnter,
+          onHoverExit: widget.onHoverExit,
+          hasAppBar: widget.hasAppBar,
+          onDragExpand: widget.onDragExpand,
+          floatWidth: widget.floatWidth,
+          currentPage: child ?? Container(),
+        );
+      },
     );
   }
 
@@ -96,7 +123,7 @@ class _LayoutMenuState extends State<LayoutMenu> {
     routes.add(
       GoRoute(
         path: '/',
-        redirect: (_) {
+        redirect: (_, state) {
           return (widget.loginPage != null
                   ? widget.loginPage?.path ?? '/login'
                   : "/${widget.pages[0].path ?? widget.pages[0].title}")
@@ -161,36 +188,9 @@ class _LayoutMenuState extends State<LayoutMenu> {
     globalRouter = GoRouter(
       routes: routes,
       errorBuilder: widget.unknownPage == null ? null : (_, __) => widget.unknownPage!,
-      redirect: (state) {
+      redirect: (_, state) {
         if (state.location != '/login' && !isAuthenticated && widget.needsAuth) return '/login';
         return null;
-      },
-      navigatorBuilder: (context, state, child) {
-        if (state.location == '/login' || state.error != null) return child;
-        return LayoutBuilder(
-          actionWidgets: widget.actionWidgets,
-          pages: widget.pages,
-          initialPageKey: widget.initialPageKey,
-          appName: widget.appName,
-          appVersion: widget.appVersion,
-          logo: widget.logo,
-          actionButton: widget.actionButton,
-          backgroundColor: widget.backgroundColor,
-          appBarColor: widget.appBarColor,
-          navigationColor: widget.navigationColor,
-          headerColor: widget.headerColor,
-          textAppBarColor: widget.textAppBarColor,
-          textNavigationColor: widget.textNavigationColor,
-          textHeaderColor: widget.textHeaderColor,
-          selectedColor: widget.selectedColor,
-          logoutNav: widget.loginPage,
-          onHoverEnter: widget.onHoverEnter,
-          onHoverExit: widget.onHoverExit,
-          hasAppBar: widget.hasAppBar,
-          onDragExpand: widget.onDragExpand,
-          floatWidth: widget.floatWidth,
-          currentPage: child,
-        );
       },
     );
 
@@ -329,11 +329,11 @@ class _LayoutBuilderState extends State<LayoutBuilder> {
 
 class ActionMenu {
   static void goTo(String path) {
-    globalRouter.routerDelegate.go(path);
+    globalRouter.go(path);
   }
 
   static String currentPath() {
-    return globalRouter.routerDelegate.location;
+    return globalRouter.location;
   }
 
   static void setLogged() {
