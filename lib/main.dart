@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:layoutmenu/layout.dart';
 
 void main() => runApp(MyApp());
@@ -18,66 +19,41 @@ class MyApp extends StatelessWidget {
       pages: [
         NavPage(
           path: "routera",
-          icon: Icon(
-            Icons.ac_unit,
-            color: Colors.white,
-          ),
+          icon: Icon(Icons.ac_unit, color: Colors.white),
           visible: true,
           title: 'Menu 1',
-          page: Container(
-            color: Colors.amberAccent,
-            child: SingleChildScrollView(
-              child: Column(
-                children: List.generate(
-                  4,
-                  (index) => ListTile(
-                    title: Text("Big List $index"),
-                  ),
-                ),
+          page: Scaffold(
+            body: Container(
+              color: Colors.amberAccent,
+              child: SingleChildScrollView(
+                child: Column(children: List.generate(4, (index) => ListTile(title: Text("Big List $index")))),
               ),
             ),
           ),
         ),
         NavPage(
           path: "Relatórios",
-          icon: Icon(
-            Icons.ac_unit,
-            color: Colors.white,
-          ),
+          icon: Icon(Icons.ac_unit, color: Colors.white),
           visible: true,
           title: 'Menu',
           page: Container(
             color: Colors.purple,
             child: SingleChildScrollView(
               child: Column(
-                children: List.generate(
-                  6,
-                  (index) => ListTile(
-                    title: Text("Big List $index"),
-                  ),
-                ),
+                children: List.generate(6, (index) => ListTile(title: Text("Big List $index"))),
               ),
             ),
           ),
         ),
         NavPage(
           path: "routerc",
-          icon: Icon(
-            Icons.ac_unit,
-            color: Colors.white,
-          ),
+          icon: Icon(Icons.ac_unit, color: Colors.white),
           visible: true,
           title: 'Menu',
-          page: Scaffold(
-            backgroundColor: Colors.cyan,
-            body: Container(),
-          ),
+          page: Scaffold(backgroundColor: Colors.cyan, body: Container()),
         ),
         NavPage(
-          icon: Icon(
-            Icons.ac_unit,
-            color: Colors.white,
-          ),
+          icon: Icon(Icons.ac_unit, color: Colors.white),
           visible: true,
           title: 'routerd',
           page: Scaffold(
@@ -96,35 +72,23 @@ class MyApp extends StatelessWidget {
             SubPage(
               path: "purple",
               title: 'Purple',
-              page: Scaffold(
-                backgroundColor: Colors.purple,
-                body: Container(),
-              ),
+              page: Scaffold(backgroundColor: Colors.purple, body: Container()),
             ),
             SubPage(
               path: "red",
               title: 'Red Main',
-              page: Scaffold(
-                backgroundColor: Colors.red,
-                body: Container(),
-              ),
+              page: Scaffold(backgroundColor: Colors.red, body: Container()),
             ),
             SubPage(
               path: "yellow",
               title: 'Yellow Menu',
-              page: Scaffold(
-                backgroundColor: Colors.yellowAccent,
-                body: Container(),
-              ),
+              page: Scaffold(backgroundColor: Colors.yellowAccent, body: Container()),
             ),
           ],
         ),
       ],
       loginPage: NavPage(
-        icon: Icon(
-          Icons.ac_unit,
-          color: Colors.white,
-        ),
+        icon: Icon(Icons.ac_unit, color: Colors.white),
         title: 'Login',
         page: Login(),
       ),

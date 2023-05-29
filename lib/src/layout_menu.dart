@@ -64,7 +64,7 @@ class LayoutMenu extends StatefulWidget {
 }
 
 class _LayoutMenuState extends State<LayoutMenu> {
-  List<GoRoute> routes = [];
+  List<RouteBase> routes = [];
 
   @override
   void initState() {
@@ -75,37 +75,39 @@ class _LayoutMenuState extends State<LayoutMenu> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp.router(
-      routeInformationParser: globalRouter.routeInformationParser,
-      routerDelegate: globalRouter.routerDelegate,
+      // routeInformationParser: globalRouter.routeInformationParser,
+      // routerDelegate: globalRouter.routerDelegate,
       theme: widget.themeData,
       title: widget.appName,
-      builder: (context, child) {
-        if (globalRouter.location == '/login' /*|| globalRouter.error != null*/) return child ?? Container();
-        return LayoutBuilder(
-          actionWidgets: widget.actionWidgets,
-          pages: widget.pages,
-          initialPageKey: widget.initialPageKey,
-          appName: widget.appName,
-          appVersion: widget.appVersion,
-          logo: widget.logo,
-          actionButton: widget.actionButton,
-          backgroundColor: widget.backgroundColor,
-          appBarColor: widget.appBarColor,
-          navigationColor: widget.navigationColor,
-          headerColor: widget.headerColor,
-          textAppBarColor: widget.textAppBarColor,
-          textNavigationColor: widget.textNavigationColor,
-          textHeaderColor: widget.textHeaderColor,
-          selectedColor: widget.selectedColor,
-          logoutNav: widget.loginPage,
-          onHoverEnter: widget.onHoverEnter,
-          onHoverExit: widget.onHoverExit,
-          hasAppBar: widget.hasAppBar,
-          onDragExpand: widget.onDragExpand,
-          floatWidth: widget.floatWidth,
-          currentPage: child ?? Container(),
-        );
-      },
+      routerConfig: globalRouter,
+      // builder: (context, child) {
+      //   // if (globalRouter.location == '/login' || globalRouter.location == "" || globalRouter.location == "/")
+      //   //   return child ?? Container();
+      //   return LayoutBuilder(
+      //     actionWidgets: widget.actionWidgets,
+      //     pages: widget.pages,
+      //     initialPageKey: widget.initialPageKey,
+      //     appName: widget.appName,
+      //     appVersion: widget.appVersion,
+      //     logo: widget.logo,
+      //     actionButton: widget.actionButton,
+      //     backgroundColor: widget.backgroundColor,
+      //     appBarColor: widget.appBarColor,
+      //     navigationColor: widget.navigationColor,
+      //     headerColor: widget.headerColor,
+      //     textAppBarColor: widget.textAppBarColor,
+      //     textNavigationColor: widget.textNavigationColor,
+      //     textHeaderColor: widget.textHeaderColor,
+      //     selectedColor: widget.selectedColor,
+      //     logoutNav: widget.loginPage,
+      //     onHoverEnter: widget.onHoverEnter,
+      //     onHoverExit: widget.onHoverExit,
+      //     hasAppBar: widget.hasAppBar,
+      //     onDragExpand: widget.onDragExpand,
+      //     floatWidth: widget.floatWidth,
+      //     currentPage: child ?? Container(),
+      //   );
+      // },
     );
   }
 
@@ -119,6 +121,8 @@ class _LayoutMenuState extends State<LayoutMenu> {
     if (widget.selectedColor != null) selectedColor = widget.selectedColor!;
     if (widget.loginPage != null) logOutPage = widget.loginPage!..isLogout = true;
     if (widget.floatWidth != null) floatMenuWidth = widget.floatWidth!;
+
+    List<RouteBase> shellRoutes = [];
 
     routes.add(
       GoRoute(
@@ -139,15 +143,13 @@ class _LayoutMenuState extends State<LayoutMenu> {
     );
 
     if (widget.loginPage != null) {
-      routes.add(
-        GoRoute(
-          path: widget.loginPage?.path ?? '/login',
-          pageBuilder: (context, state) => NoTransitionPage<void>(
-            key: state.pageKey,
-            child: widget.loginPage!.page,
-          ),
+      shellRoutes.add(GoRoute(
+        path: widget.loginPage?.path ?? '/login',
+        pageBuilder: (context, state) => NoTransitionPage<void>(
+          key: state.pageKey,
+          child: widget.loginPage!.page,
         ),
-      );
+      ));
     }
 
     widget.pages.asMap().entries.forEach((menu) {
@@ -182,11 +184,49 @@ class _LayoutMenuState extends State<LayoutMenu> {
       menu.value..isLogout = false;
       menu.value..menuIndex = menu.key.toDouble();
 
-      routes.add(confRout);
+      shellRoutes.add(confRout);
     });
+
+    routes.add(ShellRoute(
+      navigatorKey: shellNavigatorKey,
+      builder: (BuildContext context, GoRouterState state, Widget child) {
+        // builder: (context, child) {
+        if (globalRouter.location == '/login' || globalRouter.location == "" || globalRouter.location == "/")
+          return child;
+        return LayoutBuilder(
+          actionWidgets: widget.actionWidgets,
+          pages: widget.pages,
+          initialPageKey: widget.initialPageKey,
+          appName: widget.appName,
+          appVersion: widget.appVersion,
+          logo: widget.logo,
+          actionButton: widget.actionButton,
+          backgroundColor: widget.backgroundColor,
+          appBarColor: widget.appBarColor,
+          navigationColor: widget.navigationColor,
+          headerColor: widget.headerColor,
+          textAppBarColor: widget.textAppBarColor,
+          textNavigationColor: widget.textNavigationColor,
+          textHeaderColor: widget.textHeaderColor,
+          selectedColor: widget.selectedColor,
+          logoutNav: widget.loginPage,
+          onHoverEnter: widget.onHoverEnter,
+          onHoverExit: widget.onHoverExit,
+          hasAppBar: widget.hasAppBar,
+          onDragExpand: widget.onDragExpand,
+          floatWidth: widget.floatWidth,
+          currentPage: child,
+        );
+        // },
+        // return Container(child: child); //LayoutBuilder(child: child);
+      },
+      routes: shellRoutes,
+    ));
 
     globalRouter = GoRouter(
       routes: routes,
+      initialLocation: '/login',
+      debugLogDiagnostics: true,
       errorBuilder: widget.unknownPage == null ? null : (_, __) => widget.unknownPage!,
       redirect: (_, state) {
         if (state.location != '/login' && !isAuthenticated && widget.needsAuth) return '/login';

@@ -54,13 +54,11 @@ class _ExpandedSideState extends State<ExpandedSide> {
           activeSubMenu = false;
           activeMenu = false;
           isAuthenticated = false;
-          context.go("/login");
+          context.pushReplacement("/login");
         } else {
           animationController.add(true);
           activeMenu = false;
-          context.go(
-            "/${menu.path.toString()}".withoutDiacriticalMarks.replaceAll(' ', '').toLowerCase(),
-          );
+          context.push("/${menu.path.toString()}".withoutDiacriticalMarks.replaceAll(' ', '').toLowerCase());
 
           if (menu.function != null) {
             menu.function!();
@@ -134,10 +132,7 @@ class _ExpandedSideState extends State<ExpandedSide> {
           padding: const EdgeInsets.all(8.0),
           child: Text(
             subMenu.title,
-            style: TextStyle(
-              fontSize: mediaQuery(context, 0.015).clamp(12, 15),
-              color: textNavigationColor,
-            ),
+            style: TextStyle(fontSize: mediaQuery(context, 0.015).clamp(12, 15), color: textNavigationColor),
           ),
         ),
       ),

@@ -130,9 +130,7 @@ class _SideBarState extends State<SideBar> {
                 animationController.add(true);
               }
             : null,
-        child: ExpandedSide(
-          menus: pages,
-        ),
+        child: ExpandedSide(menus: pages),
       );
     } else {
       return MouseRegion(
@@ -142,10 +140,7 @@ class _SideBarState extends State<SideBar> {
                 animationController.add(true);
               }
             : null,
-        child: SmallSideBar(
-          menus: pages,
-          roundBorder: !widget.hasAppBar,
-        ),
+        child: SmallSideBar(menus: pages, roundBorder: !widget.hasAppBar),
       );
     }
   }

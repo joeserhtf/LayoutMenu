@@ -57,7 +57,7 @@
     },
     {
       "name": "go_router",
-      "rootUri": "file:///C:/Users/joeser.fermiano/AppData/Local/Pub/Cache/hosted/pub.dev/go_router-6.5.9",
+      "rootUri": "file:///C:/Users/joeser.fermiano/AppData/Local/Pub/Cache/hosted/pub.dev/go_router-7.1.1",
       "packageUri": "lib/",
       "languageVersion": "2.18"
     },
@@ -149,10 +149,10 @@
       "name": "layoutmenu",
       "rootUri": "../",
       "packageUri": "lib/",
-      "languageVersion": "2.16"
+      "languageVersion": "3.0"
     }
   ],
-  "generated": "2023-05-25T13:52:57.401676Z",
+  "generated": "2023-05-29T11:06:50.602396Z",
   "generator": "pub",
   "generatorVersion": "3.0.1"
 }

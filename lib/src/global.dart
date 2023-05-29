@@ -21,6 +21,9 @@ double floatMenuWidth = 185;
 
 late GoRouter globalRouter;
 
+final GlobalKey<NavigatorState> rootNavigatorKey = GlobalKey<NavigatorState>(debugLabel: 'root');
+final GlobalKey<NavigatorState> shellNavigatorKey = GlobalKey<NavigatorState>(debugLabel: 'shell');
+
 String? initialPageKey;
 
 List<NavPage>? globalPages;
