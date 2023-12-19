@@ -133,13 +133,16 @@ class _SmallSideBarState extends State<SmallSideBar> {
           height: 60,
           color: navigationColor,
           child: ListTile(
-            leading: ConstrainedBox(
-              constraints: BoxConstraints(maxHeight: 24, maxWidth: 24),
-              child: Theme(
-                data: ThemeData(
-                  iconTheme: IconThemeData(color: textNavigationColor),
+            leading: SizedBox(
+              width: 0,
+              child: ConstrainedBox(
+                constraints: BoxConstraints(maxHeight: 24, maxWidth: 24),
+                child: Theme(
+                  data: ThemeData(
+                    iconTheme: IconThemeData(color: textNavigationColor),
+                  ),
+                  child: menu.icon,
                 ),
-                child: menu.icon,
               ),
             ),
             onTap: () {
@@ -154,8 +157,7 @@ class _SmallSideBarState extends State<SmallSideBar> {
                   isAuthenticated = false;
                   globalRouter.go("/login");
                 } else {
-                  globalRouter.go(
-                      "/${menu.path.toString()}".withoutDiacriticalMarks.replaceAll(' ', '').toLowerCase());
+                  globalRouter.go("/${menu.path.toString()}".withoutDiacriticalMarks.replaceAll(' ', '').toLowerCase());
                   activeSubMenu = false;
                   animationController.add(true);
                 }
