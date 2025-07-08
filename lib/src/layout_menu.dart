@@ -32,7 +32,7 @@ class LayoutMenu extends StatefulWidget {
   final Widget? unknownPage;
   final ThemeData? themeData;
   final bool isMobile;
-  final List<DrawerItem> drawerItems;
+  final List<ListTile> drawerItems;
 
   LayoutMenu({
     this.actionWidgets,
@@ -281,7 +281,7 @@ class LayoutBuilder extends StatefulWidget {
   final double? floatWidth;
   final Widget currentPage;
   final bool isMobile;
-  final List<DrawerItem> drawerItems;
+  final List<ListTile> drawerItems;
 
   LayoutBuilder({
     Key? key,
@@ -340,7 +340,7 @@ class _LayoutBuilderState extends State<LayoutBuilder> {
               ),
               child: Text(widget.appName),
             ),
-            _drawerItems(widget.drawerItems)[0],
+            if (widget.drawerItems.isNotEmpty) widget.drawerItems[0],
           ],
         ),
       ),
@@ -362,24 +362,6 @@ class _LayoutBuilderState extends State<LayoutBuilder> {
         child: _builderPages(),
       ),
     );
-  }
-
-  List<Widget> _drawerItems(List<DrawerItem> items) {
-    List<ListTile> tiles = [];
-
-    if (items.isNotEmpty) {
-      for (final element in items) {
-        tiles.add(ListTile(
-          leading: element.icon,
-          title: Text(element.title),
-          onTap: () {
-            element.function();
-          },
-        ));
-      }
-      return tiles;
-    }
-    return [];
   }
 
   _builderPages() {

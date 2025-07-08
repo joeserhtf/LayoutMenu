@@ -48,15 +48,3 @@ class SubPage {
     this.path,
   });
 }
-
-class DrawerItem {
-  String title;
-  Icon icon;
-  Function function;
-
-  DrawerItem({
-    required this.title,
-    required this.icon,
-    required this.function,
-  });
-}

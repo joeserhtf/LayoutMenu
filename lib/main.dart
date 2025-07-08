@@ -9,7 +9,12 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return LayoutMenu(
       drawerItems: [
-        DrawerItem(title: "Teste 1", icon: Icon(Icons.abc_sharp), function: (){})
+        ListTile(
+          title: Text("Teste 1"),
+          onTap: () {
+            
+          },
+        )
       ],
       isMobile: true,
       logo: Icon(Icons.pages),
@@ -30,7 +35,9 @@ class MyApp extends StatelessWidget {
             body: Container(
               color: Colors.amberAccent,
               child: SingleChildScrollView(
-                child: Column(children: List.generate(4, (index) => ListTile(title: Text("Big List $index")))),
+                child: Column(
+                    children: List.generate(4,
+                        (index) => ListTile(title: Text("Big List $index")))),
               ),
             ),
           ),
@@ -44,7 +51,8 @@ class MyApp extends StatelessWidget {
             color: Colors.purple,
             child: SingleChildScrollView(
               child: Column(
-                children: List.generate(6, (index) => ListTile(title: Text("Big List $index"))),
+                children: List.generate(
+                    6, (index) => ListTile(title: Text("Big List $index"))),
               ),
             ),
           ),
@@ -86,7 +94,8 @@ class MyApp extends StatelessWidget {
             SubPage(
               path: "yellow",
               title: 'Yellow Menu',
-              page: Scaffold(backgroundColor: Colors.yellowAccent, body: Container()),
+              page: Scaffold(
+                  backgroundColor: Colors.yellowAccent, body: Container()),
             ),
           ],
         ),
