@@ -10,6 +10,20 @@ class MyApp extends StatelessWidget {
     return LayoutMenu(
       drawerItems: [
         ListTile(
+          selectedColor: Colors.black,
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+          title: Text("Teste 1"),
+          onTap: () {
+            ActionMenu.goTo("/routerc");
+          },
+        ),
+         ListTile(
+          title: Text("Teste 1"),
+          onTap: () {
+            ActionMenu.goTo("/routerc");
+          },
+        ),
+         ListTile(
           title: Text("Teste 1"),
           onTap: () {
             ActionMenu.goTo("/routerc");

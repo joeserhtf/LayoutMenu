@@ -32,7 +32,8 @@ class LayoutMenu extends StatefulWidget {
   final Widget? unknownPage;
   final ThemeData? themeData;
   final bool isMobile;
-  final List<ListTile> drawerItems;
+  final List<Widget> drawerItems;
+  final Color drawerColor;
 
   LayoutMenu({
     this.actionWidgets,
@@ -61,6 +62,7 @@ class LayoutMenu extends StatefulWidget {
     this.themeData,
     required this.isMobile,
     required this.drawerItems,
+    this.drawerColor = Colors.transparent,
   });
 
   @override
@@ -281,35 +283,37 @@ class LayoutBuilder extends StatefulWidget {
   final double? floatWidth;
   final Widget currentPage;
   final bool isMobile;
-  final List<ListTile> drawerItems;
+  final List<Widget> drawerItems;
+  final Color drawerColor;
 
-  LayoutBuilder({
-    Key? key,
-    this.actionWidgets,
-    required this.pages,
-    required this.appName,
-    required this.appVersion,
-    required this.logo,
-    this.backgroundColor,
-    this.initialPageKey,
-    this.actionButton,
-    this.appBarColor,
-    this.headerColor,
-    this.navigationColor,
-    this.textAppBarColor,
-    this.textHeaderColor,
-    this.textNavigationColor,
-    this.selectedColor,
-    this.logoutNav,
-    this.onHoverEnter = false,
-    this.onHoverExit = true,
-    this.onDragExpand = false,
-    this.hasAppBar = true,
-    this.floatWidth,
-    required this.currentPage,
-    required this.isMobile,
-    required this.drawerItems,
-  }) : super(key: key);
+  LayoutBuilder(
+      {Key? key,
+      this.actionWidgets,
+      required this.pages,
+      required this.appName,
+      required this.appVersion,
+      required this.logo,
+      this.backgroundColor,
+      this.initialPageKey,
+      this.actionButton,
+      this.appBarColor,
+      this.headerColor,
+      this.navigationColor,
+      this.textAppBarColor,
+      this.textHeaderColor,
+      this.textNavigationColor,
+      this.selectedColor,
+      this.logoutNav,
+      this.onHoverEnter = false,
+      this.onHoverExit = true,
+      this.onDragExpand = false,
+      this.hasAppBar = true,
+      this.floatWidth,
+      required this.currentPage,
+      required this.isMobile,
+      required this.drawerItems,
+      this.drawerColor = Colors.transparent})
+      : super(key: key);
 
   @override
   State<LayoutBuilder> createState() => _LayoutBuilderState();
@@ -331,16 +335,16 @@ class _LayoutBuilderState extends State<LayoutBuilder> {
     return Scaffold(
       key: _drawerKey,
       drawer: Drawer(
+        backgroundColor: widget.drawerColor,
+        width: 200,
+        shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.only(
+                topRight: Radius.circular(16),
+                bottomRight: Radius.circular(16))),
         child: ListView(
           padding: EdgeInsets.zero,
           children: [
-            DrawerHeader(
-              decoration: BoxDecoration(
-                color: Colors.blue,
-              ),
-              child: Text(widget.appName),
-            ),
-            if (widget.drawerItems.isNotEmpty) widget.drawerItems[0],
+            if (widget.drawerItems.isNotEmpty) ...widget.drawerItems,
           ],
         ),
       ),
@@ -367,14 +371,13 @@ class _LayoutBuilderState extends State<LayoutBuilder> {
   _builderPages() {
     return Stack(
       children: [
-        
-          Padding(
-            padding: EdgeInsets.only(
-              left: isLargeScreen(context) ? minWidthBar : 0,
-              top: widget.hasAppBar ? kToolbarHeight : 0.0,
-            ),
-            child: currentPage,
+        Padding(
+          padding: EdgeInsets.only(
+            left: isLargeScreen(context) ? minWidthBar : 0,
+            top: widget.hasAppBar ? kToolbarHeight : 0.0,
           ),
+          child: currentPage,
+        ),
         StreamBuilder(
           stream: animationController.stream,
           builder: (context, child) {
