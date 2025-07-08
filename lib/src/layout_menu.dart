@@ -235,6 +235,7 @@ class _LayoutMenuState extends State<LayoutMenu> {
           currentPage: child,
           isMobile: widget.isMobile,
           drawerItems: widget.drawerItems,
+          drawerColor: widget.drawerColor,
         );
         // },
         // return Container(child: child); //LayoutBuilder(child: child);
