@@ -128,6 +128,8 @@ class MyApp extends StatelessWidget {
         title: 'Login',
         page: Login(),
       ),
+      isMobile: false,
+      drawerItems: [],
     );
   }
 }

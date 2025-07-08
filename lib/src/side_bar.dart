@@ -17,6 +17,8 @@ class SideBar extends StatefulWidget {
   final bool onHoverExit;
   final actionWidgets;
   final Widget currentPage;
+  final bool isMobile;
+  final GlobalKey<ScaffoldState> drawerKey;
 
   SideBar({
     required this.logo,
@@ -28,6 +30,8 @@ class SideBar extends StatefulWidget {
     required this.onHoverEnter,
     required this.onHoverExit,
     required this.currentPage,
+    required this.isMobile,
+    required this.drawerKey,
   });
 
   @override
@@ -47,16 +51,20 @@ class _SideBarState extends State<SideBar> {
           .contains(globalRouter.location.split('/')[1]);
     });
     return Padding(
-      padding: !widget.hasAppBar ? const EdgeInsets.symmetric(vertical: 1) : EdgeInsets.zero,
+      padding: !widget.hasAppBar
+          ? const EdgeInsets.symmetric(vertical: 1)
+          : EdgeInsets.zero,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Row(
             children: [
-              _leadingSideBar(),
+              if (!widget.isMobile) _leadingSideBar(),
               if (widget.hasAppBar) ...{
                 Expanded(
                     child: CustomAppBar(
+                  isMobile: widget.isMobile,
+                  drawerKey: widget.drawerKey,
                   pages: pages,
                   actionWidgets: widget.actionWidgets ?? [],
                   title: titleIndex != -1 ? pages[titleIndex].title : '',
@@ -64,15 +72,18 @@ class _SideBarState extends State<SideBar> {
               }
             ],
           ),
-          ConstrainedBox(
-            constraints: BoxConstraints(
-              maxWidth: maxWidthBar,
-              minWidth: minWidthBar,
-              minHeight: MediaQuery.of(context).size.height - (kToolbarHeight + (!widget.hasAppBar ? 2 : 0)),
-              maxHeight: (MediaQuery.of(context).size.height - (kToolbarHeight + (!widget.hasAppBar ? 2 : 0))),
+          if (!widget.isMobile)
+            ConstrainedBox(
+              constraints: BoxConstraints(
+                maxWidth: maxWidthBar,
+                minWidth: minWidthBar,
+                minHeight: MediaQuery.of(context).size.height -
+                    (kToolbarHeight + (!widget.hasAppBar ? 2 : 0)),
+                maxHeight: (MediaQuery.of(context).size.height -
+                    (kToolbarHeight + (!widget.hasAppBar ? 2 : 0))),
+              ),
+              child: _menu(),
             ),
-            child: _menu(),
-          ),
         ],
       ),
     );

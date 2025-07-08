@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:layoutmenu/src/drawer_item.dart';
 import 'package:layoutmenu/src/nav_page.dart';
 import 'package:layoutmenu/src/utils/accents_remover.dart';
 
@@ -31,6 +32,8 @@ class LayoutMenu extends StatefulWidget {
   final bool needsAuth;
   final Widget? unknownPage;
   final ThemeData? themeData;
+  final bool isMobile;
+  final List<DrawerItem> drawerItems;
 
   LayoutMenu({
     this.actionWidgets,
@@ -57,6 +60,8 @@ class LayoutMenu extends StatefulWidget {
     this.needsAuth = false,
     this.unknownPage,
     this.themeData,
+    required this.isMobile,
+    required this.drawerItems,
   });
 
   @override
@@ -114,12 +119,17 @@ class _LayoutMenuState extends State<LayoutMenu> {
   void _checkAndConfig() {
     if (widget.appBarColor != null) appBarColor = widget.appBarColor!;
     if (widget.headerColor != null) headerColor = widget.headerColor!;
-    if (widget.navigationColor != null) navigationColor = widget.navigationColor!;
-    if (widget.textAppBarColor != null) textAppBarColor = widget.textAppBarColor!;
-    if (widget.textHeaderColor != null) textHeaderColor = widget.textHeaderColor!;
-    if (widget.textNavigationColor != null) textNavigationColor = widget.textNavigationColor!;
+    if (widget.navigationColor != null)
+      navigationColor = widget.navigationColor!;
+    if (widget.textAppBarColor != null)
+      textAppBarColor = widget.textAppBarColor!;
+    if (widget.textHeaderColor != null)
+      textHeaderColor = widget.textHeaderColor!;
+    if (widget.textNavigationColor != null)
+      textNavigationColor = widget.textNavigationColor!;
     if (widget.selectedColor != null) selectedColor = widget.selectedColor!;
-    if (widget.loginPage != null) logOutPage = widget.loginPage!..isLogout = true;
+    if (widget.loginPage != null)
+      logOutPage = widget.loginPage!..isLogout = true;
     if (widget.floatWidth != null) floatMenuWidth = widget.floatWidth!;
 
     List<RouteBase> shellRoutes = [];
@@ -153,14 +163,19 @@ class _LayoutMenuState extends State<LayoutMenu> {
     }
 
     widget.pages.asMap().entries.forEach((menu) {
-      String path = "/${menu.value.path ?? menu.value.title}".withoutDiacriticalMarks.replaceAll(' ', '').toLowerCase();
+      String path = "/${menu.value.path ?? menu.value.title}"
+          .withoutDiacriticalMarks
+          .replaceAll(' ', '')
+          .toLowerCase();
 
       List<GoRoute> subPaths = [];
 
       menu.value.subMenus?.asMap().entries.forEach((subMenu) {
         subMenu.value..menuIndex = subMenu.key.toDouble();
-        String subPath =
-            "${subMenu.value.path ?? subMenu.value.title}".withoutDiacriticalMarks.replaceAll(' ', '').toLowerCase();
+        String subPath = "${subMenu.value.path ?? subMenu.value.title}"
+            .withoutDiacriticalMarks
+            .replaceAll(' ', '')
+            .toLowerCase();
         subPaths.add(
           GoRoute(
             path: subPath,
@@ -191,8 +206,9 @@ class _LayoutMenuState extends State<LayoutMenu> {
       navigatorKey: shellNavigatorKey,
       builder: (BuildContext context, GoRouterState state, Widget child) {
         // builder: (context, child) {
-        if (globalRouter.location == '/login' || globalRouter.location == "" || globalRouter.location == "/")
-          return child;
+        if (globalRouter.location == '/login' ||
+            globalRouter.location == "" ||
+            globalRouter.location == "/") return child;
         return LayoutBuilder(
           actionWidgets: widget.actionWidgets,
           pages: widget.pages,
@@ -216,6 +232,8 @@ class _LayoutMenuState extends State<LayoutMenu> {
           onDragExpand: widget.onDragExpand,
           floatWidth: widget.floatWidth,
           currentPage: child,
+          isMobile: widget.isMobile,
+          drawerItems: widget.drawerItems,
         );
         // },
         // return Container(child: child); //LayoutBuilder(child: child);
@@ -227,9 +245,11 @@ class _LayoutMenuState extends State<LayoutMenu> {
       routes: routes,
       initialLocation: '/login',
       debugLogDiagnostics: true,
-      errorBuilder: widget.unknownPage == null ? null : (_, __) => widget.unknownPage!,
+      errorBuilder:
+          widget.unknownPage == null ? null : (_, __) => widget.unknownPage!,
       redirect: (_, state) {
-        if (state.location != '/login' && !isAuthenticated && widget.needsAuth) return '/login';
+        if (state.location != '/login' && !isAuthenticated && widget.needsAuth)
+          return '/login';
         return null;
       },
     );
@@ -261,6 +281,8 @@ class LayoutBuilder extends StatefulWidget {
   final bool onDragExpand;
   final double? floatWidth;
   final Widget currentPage;
+  final bool isMobile;
+  final List<DrawerItem> drawerItems;
 
   LayoutBuilder({
     Key? key,
@@ -286,6 +308,8 @@ class LayoutBuilder extends StatefulWidget {
     this.hasAppBar = true,
     this.floatWidth,
     required this.currentPage,
+    required this.isMobile,
+    required this.drawerItems,
   }) : super(key: key);
 
   @override
@@ -294,7 +318,7 @@ class LayoutBuilder extends StatefulWidget {
 
 class _LayoutBuilderState extends State<LayoutBuilder> {
   List<NavPage> emptyList = [];
-
+  final GlobalKey<ScaffoldState> _drawerKey = GlobalKey();
   Widget get currentPage => widget.currentPage;
 
   @override
@@ -306,6 +330,21 @@ class _LayoutBuilderState extends State<LayoutBuilder> {
   Widget build(BuildContext context) {
     _checkLogOutButton();
     return Scaffold(
+      key: _drawerKey,
+      drawer: Drawer(
+        child: ListView(
+          padding: EdgeInsets.zero,
+          children: [
+            DrawerHeader(
+              decoration: BoxDecoration(
+                color: Colors.blue,
+              ),
+              child: Text(widget.appName),
+            ),
+            _drawerItems(widget.drawerItems)[0],
+          ],
+        ),
+      ),
       floatingActionButton: widget.actionButton,
       drawerScrimColor: Colors.transparent,
       backgroundColor: widget.backgroundColor ?? Colors.transparent,
@@ -326,16 +365,35 @@ class _LayoutBuilderState extends State<LayoutBuilder> {
     );
   }
 
+  List<Widget> _drawerItems(List<DrawerItem> items) {
+    List<ListTile> tiles = [];
+
+    if (items.isNotEmpty) {
+      for (final element in items) {
+        tiles.add(ListTile(
+          leading: element.icon,
+          title: Text(element.title),
+          onTap: () {
+            element.function();
+          },
+        ));
+      }
+      return tiles;
+    }
+    return [];
+  }
+
   _builderPages() {
     return Stack(
       children: [
-        Padding(
-          padding: EdgeInsets.only(
-            left: isLargeScreen(context) ? minWidthBar : 0,
-            top: widget.hasAppBar ? kToolbarHeight : 0.0,
+        if (!widget.isMobile)
+          Padding(
+            padding: EdgeInsets.only(
+              left: isLargeScreen(context) ? minWidthBar : 0,
+              top: widget.hasAppBar ? kToolbarHeight : 0.0,
+            ),
+            child: currentPage,
           ),
-          child: currentPage,
-        ),
         StreamBuilder(
           stream: animationController.stream,
           builder: (context, child) {
@@ -351,6 +409,8 @@ class _LayoutBuilderState extends State<LayoutBuilder> {
                 onHoverEnter: widget.onHoverEnter,
                 actionWidgets: widget.actionWidgets,
                 currentPage: widget.currentPage,
+                isMobile: widget.isMobile,
+                drawerKey: _drawerKey,
               ),
             );
           },
@@ -360,8 +420,10 @@ class _LayoutBuilderState extends State<LayoutBuilder> {
   }
 
   void _checkLogOutButton() {
-    if (widget.logoutNav != null && globalPages?.indexWhere((element) => element.isLogout) == -1) {
-      logOutOnScroll = MediaQuery.of(context).size.height < widget.pages.length * 64;
+    if (widget.logoutNav != null &&
+        globalPages?.indexWhere((element) => element.isLogout) == -1) {
+      logOutOnScroll =
+          MediaQuery.of(context).size.height < widget.pages.length * 64;
       if (logOutOnScroll) globalPages?.add(widget.logoutNav!);
     }
   }

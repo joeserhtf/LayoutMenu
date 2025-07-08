@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:layoutmenu/layout.dart';
+import 'package:layoutmenu/src/drawer_item.dart';
 
 void main() => runApp(MyApp());
 
@@ -8,6 +9,10 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return LayoutMenu(
+      drawerItems: [
+        DrawerItem(title: "Teste 1", icon: Icon(Icons.abc_sharp), function: (){})
+      ],
+      isMobile: true,
       logo: Icon(Icons.pages),
       initialPageKey: "purple",
       appName: 'LayoutMenu',
@@ -15,7 +20,7 @@ class MyApp extends StatelessWidget {
       onHoverEnter: false,
       hasAppBar: true,
       needsAuth: true,
-      backgroundColor: Colors.pink,
+      backgroundColor: Colors.red,
       pages: [
         NavPage(
           path: "routera",

@@ -6,6 +6,8 @@ import 'global.dart';
 class CustomAppBar extends StatelessWidget {
   final List<Widget>? actionWidgets;
   final List<NavPage?> pages;
+  final bool isMobile;
+  final GlobalKey<ScaffoldState> drawerKey;
   final String title;
 
   CustomAppBar({
@@ -13,6 +15,8 @@ class CustomAppBar extends StatelessWidget {
     this.actionWidgets,
     required this.pages,
     required this.title,
+    required this.isMobile,
+    required this.drawerKey,
   }) : super(key: key);
 
   @override
@@ -39,8 +43,14 @@ class CustomAppBar extends StatelessWidget {
                             color: textAppBarColor,
                           ),
                           onPressed: () {
-                            activeMenu = !activeMenu;
+                            if (isMobile) {
+                              drawerKey.currentState!.openDrawer();
+                            }
+                            if (!isMobile) {
+                              activeMenu = !activeMenu;
                             animationController.add(true);
+                            }
+                            
                           }),
                       Padding(
                         padding: EdgeInsets.only(bottom: 4),
