@@ -12,7 +12,7 @@ class MyApp extends StatelessWidget {
         ListTile(
           title: Text("Teste 1"),
           onTap: () {
-            
+            ActionMenu.goTo("/routerc");
           },
         )
       ],

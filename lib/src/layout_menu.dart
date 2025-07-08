@@ -367,7 +367,7 @@ class _LayoutBuilderState extends State<LayoutBuilder> {
   _builderPages() {
     return Stack(
       children: [
-        if (!widget.isMobile)
+        
           Padding(
             padding: EdgeInsets.only(
               left: isLargeScreen(context) ? minWidthBar : 0,
