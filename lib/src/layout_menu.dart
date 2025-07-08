@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:layoutmenu/src/drawer_item.dart';
 import 'package:layoutmenu/src/nav_page.dart';
 import 'package:layoutmenu/src/utils/accents_remover.dart';
 

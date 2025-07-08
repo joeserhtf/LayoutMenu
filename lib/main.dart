@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:layoutmenu/layout.dart';
-import 'package:layoutmenu/src/drawer_item.dart';
 
 void main() => runApp(MyApp());
 
