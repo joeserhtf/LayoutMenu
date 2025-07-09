@@ -9,7 +9,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return LayoutMenu(
       drawerItems: [
-        ListTile(
+        /* ListTile(
           selectedColor: Colors.black,
           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
           title: Text("Teste 1"),
@@ -28,7 +28,7 @@ class MyApp extends StatelessWidget {
           onTap: () {
             ActionMenu.goTo("/routerc");
           },
-        )
+        ) */
       ],
       isMobile: true,
       logo: Icon(Icons.pages),
@@ -116,7 +116,7 @@ class MyApp extends StatelessWidget {
       ],
       loginPage: NavPage(
         icon: Icon(Icons.ac_unit, color: Colors.white),
-        title: 'Login',
+        title: 'Loginghgh',
         page: Login(),
       ),
     );

@@ -332,7 +332,7 @@ class _LayoutBuilderState extends State<LayoutBuilder> {
 
   @override
   Widget build(BuildContext context) {
-    _checkLogOutButton();
+    //_checkLogOutButton();
     return Scaffold(
       key: _drawerKey,
       drawer: Drawer(
@@ -342,8 +342,7 @@ class _LayoutBuilderState extends State<LayoutBuilder> {
             borderRadius: BorderRadius.only(
                 topRight: Radius.circular(16),
                 bottomRight: Radius.circular(16))),
-        child: ListView(
-          padding: EdgeInsets.zero,
+        child: Column(
           children: [
             if (widget.drawerItems.isNotEmpty) ...widget.drawerItems,
           ],
@@ -374,7 +373,7 @@ class _LayoutBuilderState extends State<LayoutBuilder> {
       children: [
         Padding(
           padding: EdgeInsets.only(
-            left: isLargeScreen(context) ? minWidthBar : 0,
+            left: !widget.isMobile ? minWidthBar : 0,
             top: widget.hasAppBar ? kToolbarHeight : 0.0,
           ),
           child: currentPage,
