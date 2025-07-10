@@ -34,6 +34,7 @@ class LayoutMenu extends StatefulWidget {
   final bool isMobile;
   final List<Widget> drawerItems;
   final Color drawerColor;
+  final GlobalKey<ScaffoldState> drawerKey;
 
   LayoutMenu({
     this.actionWidgets,
@@ -63,6 +64,7 @@ class LayoutMenu extends StatefulWidget {
     required this.isMobile,
     required this.drawerItems,
     this.drawerColor = Colors.transparent,
+    required this.drawerKey,
   });
 
   @override
@@ -236,6 +238,7 @@ class _LayoutMenuState extends State<LayoutMenu> {
           isMobile: widget.isMobile,
           drawerItems: widget.drawerItems,
           drawerColor: widget.drawerColor,
+          drawerKey: widget.drawerKey,
         );
         // },
         // return Container(child: child); //LayoutBuilder(child: child);
@@ -286,6 +289,7 @@ class LayoutBuilder extends StatefulWidget {
   final bool isMobile;
   final List<Widget> drawerItems;
   final Color drawerColor;
+  final GlobalKey<ScaffoldState> drawerKey;
 
   LayoutBuilder(
       {Key? key,
@@ -313,6 +317,7 @@ class LayoutBuilder extends StatefulWidget {
       required this.currentPage,
       required this.isMobile,
       required this.drawerItems,
+      required this.drawerKey,
       this.drawerColor = Colors.transparent})
       : super(key: key);
 
@@ -322,7 +327,6 @@ class LayoutBuilder extends StatefulWidget {
 
 class _LayoutBuilderState extends State<LayoutBuilder> {
   List<NavPage> emptyList = [];
-  final GlobalKey<ScaffoldState> _drawerKey = GlobalKey();
   Widget get currentPage => widget.currentPage;
 
   @override
@@ -332,9 +336,9 @@ class _LayoutBuilderState extends State<LayoutBuilder> {
 
   @override
   Widget build(BuildContext context) {
-    //_checkLogOutButton();
+    _checkLogOutButton();
     return Scaffold(
-      key: _drawerKey,
+      key: widget.drawerKey,
       drawer: Drawer(
         backgroundColor: widget.drawerColor,
         width: 200,
@@ -394,7 +398,7 @@ class _LayoutBuilderState extends State<LayoutBuilder> {
                 actionWidgets: widget.actionWidgets,
                 currentPage: widget.currentPage,
                 isMobile: widget.isMobile,
-                drawerKey: _drawerKey,
+                drawerKey: widget.drawerKey,
               ),
             );
           },

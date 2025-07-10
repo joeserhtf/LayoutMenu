@@ -4,6 +4,7 @@ import 'package:layoutmenu/layout.dart';
 void main() => runApp(MyApp());
 
 class MyApp extends StatelessWidget {
+  final GlobalKey<ScaffoldState> _drawerKey = GlobalKey<ScaffoldState>();
   @override
   Widget build(BuildContext context) {
     return LayoutMenu(
@@ -15,6 +16,7 @@ class MyApp extends StatelessWidget {
       hasAppBar: true,
       needsAuth: true,
       backgroundColor: Colors.pink,
+      drawerKey: _drawerKey,
       pages: [
         NavPage(
           path: "routera",

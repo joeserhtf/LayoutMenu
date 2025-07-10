@@ -5,9 +5,11 @@ import 'package:layoutmenu/layout.dart';
 void main() => runApp(MyApp());
 
 class MyApp extends StatelessWidget {
+  final GlobalKey<ScaffoldState> _drawerKey = GlobalKey<ScaffoldState>();
   @override
   Widget build(BuildContext context) {
     return LayoutMenu(
+      drawerKey: _drawerKey,
       drawerItems: [
         /* ListTile(
           selectedColor: Colors.black,
